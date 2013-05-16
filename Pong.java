@@ -80,7 +80,7 @@ public class Pong extends JPanel{
 
 			@Override
 			public void keyReleased(KeyEvent arg) {
-				switch(arg.getKeyCode()){//da poterli fermare ai bordi sarebbe fichissimo accelerare il movimento se il tasto è premuto per un tot.
+				switch(arg.getKeyCode()){
 				case 87:;
 				case 83: baseDY = 0;
 				break;
@@ -110,11 +110,24 @@ public class Pong extends JPanel{
 	}
 
 	public void updateBallPosition(){
-		ball.x = ball.getX() + dx;
-		ball.y = ball.getY() + dy;//dopo avere aggiornato la pos serve metodo per stabilire a chi tocca aggiornare la pos
+		if(ball.x < 11 || ball.x > 473 || ball.y < 11 || ball.y > 504)
+			checkCollision();
+		
+		ball.x += dx;
+		ball.y += dy;//dopo avere aggiornato la pos serve metodo per stabilire a chi tocca aggiornare la pos
 		repaint();
 		checkIntersection();
 	}
+
+	private void checkCollision() {
+		if(((ball.x < 11) && dx < 0)  || ((ball.x > 473) && dx > 0))
+			dx *= -1;
+		
+		if(((ball.y < 11) && dy < 0) || ((ball.y > 504) && dy > 0))
+			dy *= -1;
+		
+	}
+
 
 	private void checkIntersection(){//controllo se incrocia una base e se esce dai bordi i punteggi e ripristino dal centro con direzione arbitraria
 		if(computing){
@@ -160,7 +173,7 @@ public class Pong extends JPanel{
 	}
 	
 	public static void startGame(){
-		JFrame f = new JFrame("ShapesDemo2D");
+		JFrame f = new JFrame("SuperPong v. 0.1");
 		f.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {System.exit(0);}
 		});

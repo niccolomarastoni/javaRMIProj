@@ -27,8 +27,8 @@ public class Pong extends JPanel{
 	private final static int BASE_WIDTH = 10;
 	private final static int BASE_HEIGHT = 50;
 	private final static int BALL_SIZE = 20;
-	private int dx = -1;
-	private int dy = -1;
+	private double dx = -1;
+	private double dy = -1;
 	private boolean computing = true;
 	private Ellipse2D.Double ball;
 	private Rectangle2D.Double leftBase;
@@ -110,7 +110,7 @@ public class Pong extends JPanel{
 	}
 
 	public void updateBallPosition(){
-		if(ball.x < 11 || ball.x > 473 || ball.y < 11 || ball.y > 504)
+		if(ball.x < 11 || ball.x > 473 || ball.y < 11 || ball.y > 480)
 			checkCollision();
 		
 		ball.x += dx;
@@ -120,12 +120,27 @@ public class Pong extends JPanel{
 	}
 
 	private void checkCollision() {
-		if(((ball.x < 11) && dx < 0)  || ((ball.x > 473) && dx > 0))
-			dx *= -1;
 		
-		if(((ball.y < 11) && dy < 0) || ((ball.y > 504) && dy > 0))
-			dy *= -1;
+		//double collisionAngle = Math.atan(dx/dy);
+		//collisionAngle = (dx > 0)?collisionAngle:collisionAngle + Math.PI; // ricavo l'angolo del vettore 
+		double exitAngle;
+		exitAngle = Math.atan(-dx/dy);
+		// idea: la nostra pallina per ora si muove in moto rettilineo uniforme, quindi il vettore di velocità
+		// deve mantenere il modulo uguale, quindi sqr(dx^2 + dy^2) è sempre radice di 2
+		// per far cambiare l'angolo dopo la collisione modifichiamo l'angolo d'uscita
+		// prendendo l'angolo di collisione e ricavando il nuovo dx = sqr(2)*cost 
+		// e il nuovo dy = sqr(2)*sint
+		//System.out.println(angle);
 		
+		if(((ball.x < 11) && dx < 0 || (ball.x > 473) && dx > 0)){
+			exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
+			dx = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.cos(exitAngle);
+		}
+		
+		if(((ball.y < 11) && dy < 0) || ((ball.y > 450) && dy > 0)){
+			exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
+			dy = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.sin(exitAngle);
+		}
 	}
 
 

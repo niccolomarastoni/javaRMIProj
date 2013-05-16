@@ -19,6 +19,11 @@ public class Pong extends JPanel{
 	private static int ySize = 535;
 	private int baseDX = 0;
 	private int baseDY = 0;
+	
+	//testing &&/|| configurabile 
+	private int baseDK = 0; //opponent x
+	private int baseDZ = 0; //opponent y
+	
 	private final static int BASE_WIDTH = 10;
 	private final static int BASE_HEIGHT = 50;
 	private final static int BALL_SIZE = 20;
@@ -26,18 +31,18 @@ public class Pong extends JPanel{
 	private int dy = -1;
 	private boolean computing = true;
 	private Ellipse2D.Double ball;
-	private Rectangle2D.Double myVBase;// o meglio farli canvas?
-	private Rectangle2D.Double myHBase;
-	private Rectangle2D.Double opponentVBase;
-	private Rectangle2D.Double opponentHBase;
+	private Rectangle2D.Double leftBase;
+	private Rectangle2D.Double lowBase;
+	private Rectangle2D.Double rightBase;
+	private Rectangle2D.Double highBase;
 
 	public Pong(){// qualcuno deve partire con l'elaborazione e poi c'è il problema di come vede ciascun utente la prorpia finestre e
 		super();// come effettivamente funziona il gioco
 		ball = new Ellipse2D.Double(250,250,BALL_SIZE,BALL_SIZE);
-		myVBase = new Rectangle2D.Double(0,225,BASE_WIDTH,BASE_HEIGHT);
-		myHBase = new Rectangle2D.Double(225,490,BASE_HEIGHT,BASE_WIDTH);
-		opponentVBase = new Rectangle2D.Double(490,225,BASE_WIDTH,BASE_HEIGHT);
-		opponentHBase =new Rectangle2D.Double(225,0,BASE_HEIGHT,BASE_WIDTH);
+		leftBase = new Rectangle2D.Double(0,225,BASE_WIDTH,BASE_HEIGHT);
+		lowBase = new Rectangle2D.Double(225,490,BASE_HEIGHT,BASE_WIDTH);
+		rightBase = new Rectangle2D.Double(490,225,BASE_WIDTH,BASE_HEIGHT);
+		highBase =new Rectangle2D.Double(225,0,BASE_HEIGHT,BASE_WIDTH);
 		this.setFocusable(true);
 		addListeners();
 	}
@@ -49,50 +54,47 @@ public class Pong extends JPanel{
 
 			@Override
 			public void keyPressed(KeyEvent arg) {// vanno creati dei metodi appositi per l'aggiornamento della pos dei myBase così
-				System.out.println(arg.getKeyCode());
-				switch(arg.getKeyChar()){//da poterli fermare ai bordi sarebbe fichissimo accelerare il movimento se il tasto è premuto per un tot.
-				case 'w':;
-				case 'W': baseDY = -5;// va implementato con il release
-				repaint();
+				//System.out.println(arg.getKeyCode());
+				switch(arg.getKeyCode()){//da poterli fermare ai bordi sarebbe fichissimo accelerare il movimento se il tasto è premuto per un tot.
+				case 87: baseDY = -5; //w
 				break;
-				case 's':;
-				case 'S': baseDY = 5;
-				repaint();
+				case 83: baseDY = 5; //s
 				break;
-				case 'a':;
-				case 'A': baseDX = - 5;
+				case 65: baseDX = - 5; //a
 				break;
-				case 'd':;
-				case 'D': baseDX = 5;
+				case 68: baseDX = 5; //d
 				break;
+				// da qui in poi opponent, per testing (oppure poi facciamo configurabile, qualcuno preferisce freccette)
+				case 38: baseDZ = -5;
+				break;
+				case 40: baseDZ = 5;
+				break;
+				case 37: baseDK = -5;
+				break;
+				case 39: baseDK = 5;
+				break;
+				// fine opponent
 				default :System.out.println("D:");break;
 				}
-				/*System.out.println(arg.getKeyCode());
-				if( arg.getKeyCode() == 38) // up
-					myVBase.y = myVBase.getY() - 10;
-				else if(arg.getKeyCode() == 40) // down
-					;
-				else if(arg.getKeyCode() == 38)
-					;
-				else if(arg.getKeyCode() == 38)
-					;*/
 			}
 
 			@Override
 			public void keyReleased(KeyEvent arg) {
-				switch(arg.getKeyChar()){//da poterli fermare ai bordi sarebbe fichissimo accelerare il movimento se il tasto è premuto per un tot.
-				case 'w':;
-				case 'W':;// va implementato con il release
-				case 's':;
-				case 'S': baseDY = 0;
-				repaint();
+				switch(arg.getKeyCode()){//da poterli fermare ai bordi sarebbe fichissimo accelerare il movimento se il tasto è premuto per un tot.
+				case 87:;
+				case 83: baseDY = 0;
 				break;
-				case 'a':;
-				case 'A': ;
-				case 'd':;
-				case 'D': baseDX = 0;
-				repaint();
+				case 65:;
+				case 68: baseDX = 0;
 				break;
+				// opponent
+				case 38:
+				case 40: baseDZ = 0;
+				break;
+				case 37:
+				case 39: baseDK = 0;
+				break;
+				// fine opponent
 				default :break;
 				}
 			}
@@ -107,7 +109,7 @@ public class Pong extends JPanel{
 
 	}
 
-	public void updatePosition(){
+	public void updateBallPosition(){
 		ball.x = ball.getX() + dx;
 		ball.y = ball.getY() + dy;//dopo avere aggiornato la pos serve metodo per stabilire a chi tocca aggiornare la pos
 		repaint();
@@ -129,10 +131,16 @@ public class Pong extends JPanel{
 
 	}
 	private void updateBasePos(){
-		if((myVBase.getY() + baseDY) >= 0 && (myVBase.getY() + baseDY) <= ySize - BASE_HEIGHT -31)
-			myVBase.y = myVBase.getY() + baseDY;
-		if((myHBase.getX() + baseDX) >= 0 && (myHBase.getX()+ baseDX) <= xSize - BASE_HEIGHT)
-			myHBase.x = myHBase.getX() + baseDX;
+		if((leftBase.getY() + baseDY) >= 0 && (leftBase.getY() + baseDY) <= ySize - BASE_HEIGHT -31)
+			leftBase.y += baseDY;
+		if((lowBase.getX() + baseDX) >= 0 && (lowBase.getX()+ baseDX) <= xSize - BASE_HEIGHT)
+			lowBase.x += baseDX;
+		
+		if((rightBase.getY() + baseDZ) >= 0 && (rightBase.getY() + baseDZ) <= ySize - BASE_HEIGHT -31)
+			rightBase.y += baseDZ; 
+		if((highBase.getX() + baseDK) >= 0 && (highBase.getX()+ baseDK) <= xSize - BASE_HEIGHT)
+			highBase.x += baseDK;
+		
 	}
 
 	public void paint(Graphics g) {
@@ -140,14 +148,17 @@ public class Pong extends JPanel{
 		super.paint(g);
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g2.setColor(new Color(0, 0, 200));
+		g2.setColor(Color.BLACK);
 		g2.fill(ball);
 		//g2.draw(ball);
-		g2.draw(myHBase);
-		g2.fill(myVBase);
-		g2.draw(opponentHBase);
-		g2.draw(opponentVBase);
+		g2.setColor(Color.BLUE);
+		g2.fill(lowBase);
+		g2.fill(leftBase);
+		g2.setColor(Color.RED);
+		g2.fill(highBase);
+		g2.fill(rightBase);
 	}
+	
 	public static void startGame(){
 		JFrame f = new JFrame("ShapesDemo2D");
 		f.addWindowListener(new WindowAdapter() {
@@ -158,9 +169,9 @@ public class Pong extends JPanel{
 		f.setSize(new Dimension(xSize,ySize));
 		f.setVisible(true);
 		while(true){
-			applet.updatePosition();
+			applet.updateBallPosition();
 			try {
-				Thread.sleep(10);
+				Thread.sleep(5);
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}

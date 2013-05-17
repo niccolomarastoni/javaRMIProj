@@ -148,7 +148,8 @@ public class Pong extends JPanel{
 	// prendendo l'angolo di collisione e ricavando il nuovo dx = sqr(2)*cost 
 	// e il nuovo dy = sqr(2)*sint
 
-	private void checkCollision() {
+	private void checkCollision() { // per adesso ho fatto una sola variazione all'angolo d'uscita (per le basi verticali)
+									// se riesci implementane altre, se no puppa
 		double exitAngle;
 		exitAngle = Math.atan(-dx/dy);
 		int i = 0;
@@ -179,7 +180,8 @@ public class Pong extends JPanel{
 				dx = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.cos(exitAngle);
 			}*/
 		
-		if(((ball.y < 11) && dy < 0) || ((ball.y > 480) && dy > 0)){
+		if(((ball.y < 11) && dy < 0) || ((ball.y > 480) && dy > 0)){ // le basi orizzontali non hanno urti strani per ora
+																	 // comunque basta copiaincollare sopra e adattare
 			if(checkIntersection()){
 				exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
 				dy = Math.sqrt(2)*Math.sin(exitAngle);
@@ -191,7 +193,7 @@ public class Pong extends JPanel{
 	}
 
 
-	private int intersection() {
+	private int intersection() { //indica con che parte della base urta la pallina
 		int bias = 20;
 		if(!checkIntersection())
 			return 0;

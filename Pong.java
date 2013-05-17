@@ -27,8 +27,9 @@ public class Pong extends JPanel{
 	private final static int BASE_WIDTH = 10;
 	private final static int BASE_HEIGHT = 50;
 	private final static int BALL_SIZE = 20;
-	private double dx = -1;
-	private double dy = -1;
+	private double dx = -1.4;
+	private double dy = -0.6;
+	private double ballAcceleration = 0;// solo per testing, poi il valore sarà circa 0.00014; 
 	private boolean computing = true;
 	private Ellipse2D.Double ball;
 	private Rectangle2D.Double leftBase;
@@ -38,7 +39,7 @@ public class Pong extends JPanel{
 
 	public Pong(){// qualcuno deve partire con l'elaborazione e poi c'è il problema di come vede ciascun utente la prorpia finestre e
 		super();// come effettivamente funziona il gioco
-		ball = new Ellipse2D.Double(250,400,BALL_SIZE,BALL_SIZE);
+		ball = new Ellipse2D.Double(250,300,BALL_SIZE,BALL_SIZE);
 		leftBase = new Rectangle2D.Double(0,225,BASE_WIDTH,BASE_HEIGHT);
 		lowBase = new Rectangle2D.Double(225,490,BASE_HEIGHT,BASE_WIDTH);
 		rightBase = new Rectangle2D.Double(490,225,BASE_WIDTH,BASE_HEIGHT);
@@ -51,7 +52,6 @@ public class Pong extends JPanel{
 	public void addListeners(){
 
 		this.addKeyListener(new KeyListener(){
-
 			@Override
 			public void keyPressed(KeyEvent arg) {// vanno creati dei metodi appositi per l'aggiornamento della pos dei myBase così
 				//System.out.println(arg.getKeyCode());
@@ -110,11 +110,11 @@ public class Pong extends JPanel{
 	}
 
 	public void updateBallPosition(){
-		if(ball.x < 11 || ball.x > 473 || ball.y < 11 || ball.y > 400)
+		if(ball.x < 11 || ball.x > 460 || ball.y < 11 || ball.y > 470)
 			checkCollision();
 
-		ball.x += dx = dx*(1 + 0.00005);
-		ball.y += dy = dy*(1 + 0.00005);//dopo avere aggiornato la pos serve metodo per stabilire a chi tocca aggiornare la pos
+		ball.x += dx = dx*(1 + ballAcceleration);
+		ball.y += dy = dy*(1 + ballAcceleration);//dopo avere aggiornato la pos serve metodo per stabilire a chi tocca aggiornare la pos
 		repaint();
 		checkIntersection();
 	}
@@ -132,7 +132,8 @@ public class Pong extends JPanel{
 		// e il nuovo dy = sqr(2)*sint
 		//System.out.println(angle);
 
-		if(((ball.x < 11) && dx < 0 || (ball.x > 480) && dx > 0)){
+		if(((ball.x < 11) && dx < 0 || (ball.x > 470) && dx > 0)){
+			
 			if(checkIntersection()){
 				exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
 				dx = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.cos(exitAngle);
@@ -141,8 +142,8 @@ public class Pong extends JPanel{
 
 		if(((ball.y < 11) && dy < 0) || ((ball.y > 450) && dy > 0)){
 			if(checkIntersection()){
-			exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
-			dy = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.sin(exitAngle);
+				exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
+				dy = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.sin(exitAngle);
 			}
 		}
 	}

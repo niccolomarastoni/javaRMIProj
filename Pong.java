@@ -113,8 +113,8 @@ public class Pong extends JPanel{
 		if(ball.x < 11 || ball.x > 473 || ball.y < 11 || ball.y > 400)
 			checkCollision();
 
-		ball.x += dx;
-		ball.y += dy;//dopo avere aggiornato la pos serve metodo per stabilire a chi tocca aggiornare la pos
+		ball.x += dx = dx*(1 + 0.00005);
+		ball.y += dy = dy*(1 + 0.00005);//dopo avere aggiornato la pos serve metodo per stabilire a chi tocca aggiornare la pos
 		repaint();
 		checkIntersection();
 	}

@@ -31,6 +31,7 @@ public class Pong extends JPanel{
 	
 	private String p1Name = "Player 1";
 	private String p2Name = "Player 2";
+	private String pressSpace = "";
 	
 	// punteggi player 1 e 2
 	private int p1Score = 0;
@@ -69,6 +70,7 @@ public class Pong extends JPanel{
 				System.out.println(arg.getKeyCode());
 				switch(arg.getKeyCode()){//da poterli fermare ai bordi sarebbe fichissimo accelerare il movimento se il tasto è premuto per un tot.
 				case 32: running = !running; // spazio per mettere in pausa o far ripartire un gioco
+				pressSpace = "";
 				break;
 				case 87: baseDY = -5; //w
 				break;
@@ -122,6 +124,7 @@ public class Pong extends JPanel{
 	public void updateBallPosition(){
 		if(ball.x < -BALL_SIZE || ball.y < -BALL_SIZE || ball.x > 480 + BALL_SIZE || ball.y > 500){
 			// se la pallina esce dal bordo incremento un punteggio (nessuno dei due se è uscito proprio sull'angolo)
+			pressSpace = "PRESS SPACE \nTO START";
 			p1Score += (ball.x < -BALL_SIZE ||  ball.y > 500)?0:1;
 			p2Score += (ball.y < -BALL_SIZE || ball.x > 480 + BALL_SIZE)?0:1;
 			running = false;
@@ -255,6 +258,8 @@ public class Pong extends JPanel{
 		g2.setColor(Color.RED);
 		g2.fill(highBase);
 		g2.fill(rightBase);
+		g2.setFont(new Font("myFont",1,20));
+		g2.drawString(pressSpace, 130,240);
 	}
 
 	public static void startGame(){

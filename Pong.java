@@ -19,11 +19,11 @@ public class Pong extends JPanel{
 	private static int ySize = 535;
 	private int baseDX = 0;
 	private int baseDY = 0;
-	
+
 	//testing &&/|| configurabile 
 	private int baseDK = 0; //opponent x
 	private int baseDZ = 0; //opponent y
-	
+
 	private final static int BASE_WIDTH = 10;
 	private final static int BASE_HEIGHT = 50;
 	private final static int BALL_SIZE = 20;
@@ -38,7 +38,7 @@ public class Pong extends JPanel{
 
 	public Pong(){// qualcuno deve partire con l'elaborazione e poi c'è il problema di come vede ciascun utente la prorpia finestre e
 		super();// come effettivamente funziona il gioco
-		ball = new Ellipse2D.Double(250,250,BALL_SIZE,BALL_SIZE);
+		ball = new Ellipse2D.Double(250,400,BALL_SIZE,BALL_SIZE);
 		leftBase = new Rectangle2D.Double(0,225,BASE_WIDTH,BASE_HEIGHT);
 		lowBase = new Rectangle2D.Double(225,490,BASE_HEIGHT,BASE_WIDTH);
 		rightBase = new Rectangle2D.Double(490,225,BASE_WIDTH,BASE_HEIGHT);
@@ -110,9 +110,9 @@ public class Pong extends JPanel{
 	}
 
 	public void updateBallPosition(){
-		if(ball.x < 11 || ball.x > 473 || ball.y < 11 || ball.y > 480)
+		if(ball.x < 11 || ball.x > 473 || ball.y < 11 || ball.y > 400)
 			checkCollision();
-		
+
 		ball.x += dx;
 		ball.y += dy;//dopo avere aggiornato la pos serve metodo per stabilire a chi tocca aggiornare la pos
 		repaint();
@@ -120,7 +120,7 @@ public class Pong extends JPanel{
 	}
 
 	private void checkCollision() {
-		
+
 		//double collisionAngle = Math.atan(dx/dy);
 		//collisionAngle = (dx > 0)?collisionAngle:collisionAngle + Math.PI; // ricavo l'angolo del vettore 
 		double exitAngle;
@@ -131,25 +131,34 @@ public class Pong extends JPanel{
 		// prendendo l'angolo di collisione e ricavando il nuovo dx = sqr(2)*cost 
 		// e il nuovo dy = sqr(2)*sint
 		//System.out.println(angle);
-		
-		if(((ball.x < 11) && dx < 0 || (ball.x > 473) && dx > 0)){
-			exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
-			dx = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.cos(exitAngle);
+
+		if(((ball.x < 11) && dx < 0 || (ball.x > 480) && dx > 0)){
+			if(checkIntersection()){
+				exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
+				dx = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.cos(exitAngle);
+			}
 		}
-		
+
 		if(((ball.y < 11) && dy < 0) || ((ball.y > 450) && dy > 0)){
+			if(checkIntersection()){
 			exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
 			dy = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.sin(exitAngle);
+			}
 		}
 	}
 
 
-	private void checkIntersection(){//controllo se incrocia una base e se esce dai bordi i punteggi e ripristino dal centro con direzione arbitraria
+	private boolean checkIntersection(){//controllo se incrocia una base e se esce dai bordi i punteggi e ripristino dal centro con direzione arbitraria
+			return ball.intersects(leftBase) || ball.intersects(rightBase) || ball.intersects(highBase) || ball.intersects(lowBase);
+
+	/*	
 		if(computing){
 			// ci vogliono variabili dx e dy per i base per dare "effetto alla palla" nb solo se la base è in movimento
 			//myVBase.intersects(r)
 			//ball.i
+
 		}
+*/
 	}
 	public void updateOpponentBase(){ // riceve aggiornamenti dall'altro giocatore sulle proprie posizioni sarebbe carino usare la classe 2dPosition
 		// magari questo metodo restituisce la posizione dei propri base.
@@ -163,12 +172,12 @@ public class Pong extends JPanel{
 			leftBase.y += baseDY;
 		if((lowBase.getX() + baseDX) >= 0 && (lowBase.getX()+ baseDX) <= xSize - BASE_HEIGHT)
 			lowBase.x += baseDX;
-		
+
 		if((rightBase.getY() + baseDZ) >= 0 && (rightBase.getY() + baseDZ) <= ySize - BASE_HEIGHT -31)
 			rightBase.y += baseDZ; 
 		if((highBase.getX() + baseDK) >= 0 && (highBase.getX()+ baseDK) <= xSize - BASE_HEIGHT)
 			highBase.x += baseDK;
-		
+
 	}
 
 	public void paint(Graphics g) {
@@ -186,7 +195,7 @@ public class Pong extends JPanel{
 		g2.fill(highBase);
 		g2.fill(rightBase);
 	}
-	
+
 	public static void startGame(){
 		JFrame f = new JFrame("SuperPong v. 0.1");
 		f.addWindowListener(new WindowAdapter() {

@@ -136,8 +136,8 @@ public class Pong extends JPanel{
 			ball.x = 300;
 			ball.y = 250;
 
-			dx = 1.4;//facciamo l'inizializzazione random
-			dy = 0.6;
+			dx = -0.6;//facciamo l'inizializzazione random
+			dy = -1.4;
 			/* codice per ininizializzaione random
 			double norm = Math.sqrt(dx*dx + dy*dy);
 			double angle = Math.random()*(3*Math.PI/2) - Math.PI/2; // angle va tra 3/2PI e -1/2PI
@@ -164,8 +164,8 @@ public class Pong extends JPanel{
 	private void checkCollision() { // per adesso ho fatto una sola variazione all'angolo d'uscita (per le basi verticali)
 		// se riesci implementane altre, se no puppa
 		double angle;
-		int smallBias = 10; 
-		int bigBias = 40;
+		double smallBias = 10; 
+		double bigBias = 40;
 		double norm = Math.sqrt(dx*dx +dy*dy); // così la palla può accelerare
 
 		if(ball.x < 11 && ball.x > 0 && dx < 0){
@@ -217,11 +217,55 @@ public class Pong extends JPanel{
 
 			}
 		}
-		if(ball.y < 11 && ball.y > 0 && dy < 0 ){ // le basi orizzontali non hanno urti strani per ora
-			;
+		if(ball.y < 11 && ball.y > 0 && dy < 0 ){ 
+			if(ball.intersects(highBase)){// controllo per l'effetto :D
+				System.out.println("Small angle" + Math.abs(ball.x - highBase.x));
+				if(ball.y < 11 && Math.abs(ball.x +15 - highBase.x) < smallBias){
+					System.out.println("Small bias");	
+
+					angle = Math.atan(((dx < 0) ? 16*(dx/dy): (dx/dy))/8);
+					dy = -norm*Math.cos(angle);
+					dx = -norm*Math.sin(angle);
+					System.out.println("dx"+dx +"dy"+ dy);
+				}
+				else if(ball.y < 11  && Math.abs(ball.x - highBase.x) > bigBias){
+					System.out.println("Big bias");
+
+					angle = Math.atan(((dx > 0) ? 16*(dx/dy) : (dx/dy))/8);
+					System.out.println("Angle "+angle);
+					dy = -norm*Math.cos(angle);
+					dx = -norm*Math.sin(angle);
+					System.out.println("dx"+dx +"dy"+ dy);
+				}
+				else
+					System.out.println("normal");
+				dy = -dy;
+			}
 		}
+		
 		if(ball.y > 474 && ball.y < 485 && dy > 0){
-			;
+			if(ball.intersects(lowBase)){// controllo per l'effetto :D
+				if(ball.y > 474 && Math.abs(ball.x +5 - lowBase.x) < smallBias){
+					System.out.println("Small bias");	
+
+					angle = Math.atan(((dx < 0) ? 16*(dx/dy): (dx/dy))/8);
+					dy = norm*Math.cos(angle);
+					dx = norm*Math.sin(angle);
+					System.out.println("dx"+dx +"dy"+ dy);
+				}
+				else if(ball.y > 474  && Math.abs(ball.x - (lowBase.x+3)) > bigBias){
+					System.out.println("Big bias");
+
+					angle = Math.atan(((dx > 0) ? 16*(dx/dy) : (dx/dy))/8);
+					System.out.println("Angle "+angle);
+					dy = norm*Math.cos(angle);
+					dx = norm*Math.sin(angle);
+					System.out.println("dx"+dx +"dy"+ dy);
+				}
+				else
+					System.out.println("normal");
+				dy = -dy;
+			}
 		}
 		
 

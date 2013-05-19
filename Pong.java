@@ -132,18 +132,18 @@ public class Pong extends JPanel{
 			p1Score += (ball.x < -BALL_SIZE ||  ball.y > 500)?0:1;
 			p2Score += (ball.y < -BALL_SIZE || ball.x > 480 + BALL_SIZE)?0:1;
 			running = false;
-			
+
 			ball.x = 300;
 			ball.y = 250;
 
-			dx = 1.8;//facciamo l'inizializzazione random
-			dy = 0.2;
+			dx = 1.4;//facciamo l'inizializzazione random
+			dy = 0.6;
 			/* codice per ininizializzaione random
 			double norm = Math.sqrt(dx*dx + dy*dy);
 			double angle = Math.random()*(3*Math.PI/2) - Math.PI/2; // angle va tra 3/2PI e -1/2PI
 			dx = norm*Math.cos(angle);
 			dy = norm*Math.sin(angle);
-			*/
+			 */
 		}
 
 		if(ball.x < 11 || ball.x > 460 || ball.y < 11 || ball.y > 470)
@@ -163,77 +163,68 @@ public class Pong extends JPanel{
 
 	private void checkCollision() { // per adesso ho fatto una sola variazione all'angolo d'uscita (per le basi verticali)
 		// se riesci implementane altre, se no puppa
-		double exitAngle;
-		exitAngle = Math.atan(-dx/dy);
-		int i = 0;
+		double angle;
+		int smallBias = 10; 
+		int bigBias = 40;
 		double norm = Math.sqrt(dx*dx +dy*dy); // così la palla può accelerare
-		
-		if(((ball.x < 11 && ball.x > 0  )  && dx < 0 || (ball.x > 474  && ball.x < 485) && dx > 0)){
-			switch(i = intersection()){
-			case 1: // simple intersection (nel mezzo della base)
-				dx = -dx;
-				//exitAngle = Math.atan(-(dx/dy));
-				break;
-			case 2: // bordo sinistro base sinistra, bordo destro base destra
-				exitAngle = Math.atan(-(dx/dy)/2);
-			case 3: // bordo destro base sinistra, bordo sinistro base destra
-				exitAngle = Math.atan(-2*(dx/dy));
-				break;
-			default: break;
-			}
-			System.out.println(i);
-			if(i > 1){
-				exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
-				dx = norm*Math.cos(exitAngle); // Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.cos(exitAngle);
-				if(i != 1)
-					dy = norm*Math.sin(exitAngle); //Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.sin(exitAngle);
-			}
-		}
-		/*
-			if(checkIntersection()){
-				exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
-				dx = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy,2))*Math.cos(exitAngle);
-			}*/
 
-		if(((ball.y < 11 && ball.y > 0) && dy < 0) || ((ball.y > 474 && ball.y < 485 ) && dy > 0)){ // le basi orizzontali non hanno urti strani per ora
-			// comunque basta copiaincollare sopra e adattare
-			if(checkIntersection()){
-				exitAngle = (dy < 0)?exitAngle:exitAngle + Math.PI;
-				dy = Math.sqrt(2)*Math.sin(exitAngle);
-				if(i > 1){
-					dx = Math.sqrt(2)*Math.cos(exitAngle);
+		if(ball.x < 11 && ball.x > 0 && dx < 0){
+			if(ball.intersects(leftBase)){// controllo per l'effetto :D
+				if(ball.x < 11 && Math.abs(ball.y - leftBase.y) < smallBias){
+					System.out.println("Small bias");	
+
+					angle = Math.atan(((dy < 0) ? 16*(dy/dx): (dy/dx))/8);
+					dy = -norm*Math.sin(angle);
+					dx = -norm*Math.cos(angle);
+					System.out.println("dx"+dx +"dy"+ dy);
 				}
+				else if(ball.x < 11  && Math.abs(ball.y - leftBase.y) > bigBias){
+					System.out.println("Big bias");
+
+					angle = Math.atan(((dy > 0) ? 16*(dy/dx) : (dy/dx))/8);
+					System.out.println("Angle "+angle);
+					dy = -norm*Math.sin(angle);
+					dx = -norm*Math.cos(angle);
+					System.out.println("dx"+dx +"dy"+ dy);
+				}
+				else
+					System.out.println("normal");
+				dx = -dx;
 			}
 		}
-	}
+		if( ball.x > 474  && ball.x < 485 && dx > 0){
+			if(ball.intersects(rightBase)){// controllo per l'effetto :D
+				System.out.println("Small angle" + Math.abs(ball.y - rightBase.y));
+				if(ball.x > 474 && Math.abs(ball.y + 10 - rightBase.y) < smallBias){// piccolo aggiustamento perchè si trova a destra D:
+					System.out.println("Small bias");	
 
-	private int intersection() { //indica con che parte della base urta la pallina
-		int bias = 20;
-		if(!checkIntersection())
-			return 0;
+					angle = Math.atan(((dy < 0) ? 16*(dx/dy) : (dx/dy))/8);
+					dy = norm*Math.sin(angle);
+					dx = norm*Math.cos(angle);
+					System.out.println("dx"+dx +"dy"+ dy);
+				}
+				else if(ball.x > 474 && Math.abs(ball.y - rightBase.y) > bigBias){
+					System.out.println("Big bias");
 
-		if((ball.x < 11 && Math.abs(ball.y - leftBase.y) < bias) || (ball.x > 480 && Math.abs(ball.y - rightBase.y) < bias))
-			return 2;
+					angle = Math.atan(((dy > 0) ? 16*(dx/dy) : (dx/dy))/8);
+					dy = norm*Math.sin(angle);
+					dx = norm*Math.cos(angle);
+					System.out.println("dx"+dx +"dy"+ dy);
+				}
+				else
+					System.out.println("normal");
+				dx = -dx;
 
-		if((ball.y < 11 && Math.abs(ball.x - highBase.x) < bias) || (ball.y > 480 && Math.abs(ball.x - lowBase.x) < bias))
-			return 3;
-
-		return 1;
-	}
-
-
-
-	private boolean checkIntersection(){
-		return ball.intersects(leftBase) || ball.intersects(rightBase) || ball.intersects(highBase) || ball.intersects(lowBase);
-
-		/*	
-		if(computing){
-			// ci vogliono variabili dx e dy per i base per dare "effetto alla palla" nb solo se la base è in movimento
-			//myVBase.intersects(r)
-			//ball.i
-
+			}
 		}
-		 */
+		if(ball.y < 11 && ball.y > 0 && dy < 0 ){ // le basi orizzontali non hanno urti strani per ora
+			;
+		}
+		if(ball.y > 474 && ball.y < 485 && dy > 0){
+			;
+		}
+		
+
 	}
 	public void updateOpponentBase(){ // riceve aggiornamenti dall'altro giocatore sulle proprie posizioni sarebbe carino usare la classe 2dPosition
 		// magari questo metodo restituisce la posizione dei propri base.
@@ -245,14 +236,14 @@ public class Pong extends JPanel{
 	private void updateBasePos(){
 		if((leftBase.getY() + baseDY) >= 0 && (leftBase.getY() + baseDY) <= ySize - BASE_BIG_SIZE -31)
 			leftBase.y += (Math.abs(baseDY) > 6)? baseDY : (baseDY += baseDY/20);
-		
+
 		if((lowBase.getX() + baseDX) >= 0 && (lowBase.getX()+ baseDX) <= xSize - BASE_BIG_SIZE)
 			lowBase.x += (Math.abs(baseDX) > 6)? baseDX : (baseDX += baseDX/20);
 
-	
+
 		if((rightBase.getY() + baseDZ) >= 0 && (rightBase.getY() + baseDZ) <= ySize - BASE_BIG_SIZE -31)
 			rightBase.y += (Math.abs(baseDZ) > 6)? baseDZ : (baseDZ += baseDZ/20); 
-		
+
 		if((highBase.getX() + baseDK) >= 0 && (highBase.getX()+ baseDK) <= xSize - BASE_BIG_SIZE)
 			highBase.x += (Math.abs(baseDK) > 6)? baseDK : (baseDK += baseDK/20);
 	}

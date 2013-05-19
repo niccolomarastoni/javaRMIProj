@@ -135,22 +135,24 @@ public class Pong extends JPanel{
 
 			ball.x = 300;
 			ball.y = 250;
-
-			dx = -0.6;//facciamo l'inizializzazione random
-			dy = -1.4;
-			/* codice per ininizializzaione random
+			// ad ogni nuovo round diamo una piccola accelerazione in più;
+			ball.x += dx*(1 + dx*0.0005); //:D
+			ball.y += dy*(1 + dy*0.0005);  //:D
+			//dx = -0.6;//facciamo l'inizializzazione random
+			//dy = -1.4;
+			/* codice per ininizializzaione random*/
 			double norm = Math.sqrt(dx*dx + dy*dy);
 			double angle = Math.random()*(3*Math.PI/2) - Math.PI/2; // angle va tra 3/2PI e -1/2PI
 			dx = norm*Math.cos(angle);
 			dy = norm*Math.sin(angle);
-			 */
+			 
 		}
 
 		if(ball.x < 11 || ball.x > 460 || ball.y < 11 || ball.y > 470)
 			checkCollision();
 
-		ball.x += dx; //= dx*(1 + dx*0.00014); 
-		ball.y += dy; //= dy*(1 + dy*0.00014);//dopo avere aggiornato la pos serve metodo per stabilire a chi tocca aggiornare la pos
+		ball.x += dx*(1 + dx*0.00014); 
+		ball.y += dy*(1 + dy*0.00014);//dopo avere aggiornato la pos serve metodo per stabilire a chi tocca aggiornare la pos
 		repaint();
 		//	checkIntersection();
 	}
@@ -170,6 +172,8 @@ public class Pong extends JPanel{
 
 		if(ball.x < 11 && ball.x > 0 && dx < 0){
 			if(ball.intersects(leftBase)){// controllo per l'effetto :D
+				if(baseDY != 0)
+					dy += baseDY/2;
 				if(ball.x < 11 && Math.abs(ball.y - leftBase.y) < smallBias){
 					System.out.println("Small bias");	
 
@@ -195,6 +199,8 @@ public class Pong extends JPanel{
 		if( ball.x > 474  && ball.x < 485 && dx > 0){
 			if(ball.intersects(rightBase)){// controllo per l'effetto :D
 				System.out.println("Small angle" + Math.abs(ball.y - rightBase.y));
+				if(baseDZ != 0)
+					dx += baseDZ/2;
 				if(ball.x > 474 && Math.abs(ball.y + 10 - rightBase.y) < smallBias){// piccolo aggiustamento perchè si trova a destra D:
 					System.out.println("Small bias");	
 
@@ -219,7 +225,10 @@ public class Pong extends JPanel{
 		}
 		if(ball.y < 11 && ball.y > 0 && dy < 0 ){ 
 			if(ball.intersects(highBase)){// controllo per l'effetto :D
+				
 				System.out.println("Small angle" + Math.abs(ball.x - highBase.x));
+				if(baseDK != 0);
+					dx += baseDK/2;
 				if(ball.y < 11 && Math.abs(ball.x +15 - highBase.x) < smallBias){
 					System.out.println("Small bias");	
 
@@ -245,6 +254,8 @@ public class Pong extends JPanel{
 		
 		if(ball.y > 474 && ball.y < 485 && dy > 0){
 			if(ball.intersects(lowBase)){// controllo per l'effetto :D
+				if(baseDX != 0)
+					dx += baseDX/2;
 				if(ball.y > 474 && Math.abs(ball.x +5 - lowBase.x) < smallBias){
 					System.out.println("Small bias");	
 

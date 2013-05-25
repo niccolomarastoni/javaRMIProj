@@ -25,7 +25,7 @@ public class Pong extends JPanel{
 	private float baseDK = 0; //opponent x
 	private float baseDZ = 0; //opponent y
 
-	private float baseSpeed = 1.2f;
+	private float baseSpeed = 1.8f;
 
 	private final static int BASE_SMALL_SIZE = 10;
 	private final static int BASE_BIG_SIZE = 50;
@@ -38,12 +38,12 @@ public class Pong extends JPanel{
 	// punteggi player 1 e 2
 	private int p1Score = 0;
 	private int p2Score = 0;
-
-	private double dx ;
-	private double dy ;
+	
+	private double dx;
+	private double dy;
 	//private double ballAcceleration = 0;// solo per testing, poi il valore sarà circa 0.00014; // non va bene cicicomerda
 	private boolean computing = true;
-	private static boolean running = true;
+	private static boolean running = false;
 	private Line2D.Double line;
 	private Ellipse2D.Double ball;
 	private Rectangle2D.Double leftBase;
@@ -60,9 +60,17 @@ public class Pong extends JPanel{
 		rightBase = new Rectangle2D.Double(490,225,BASE_SMALL_SIZE,BASE_BIG_SIZE);
 		highBase =new Rectangle2D.Double(225,0,BASE_BIG_SIZE,BASE_SMALL_SIZE);
 		this.setFocusable(true);
+		JFrame f = new JFrame("SuperPong v. 0.2 D:");
+		f.addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {System.exit(0);}
+		});
+
+		f.getContentPane().add("Center", this);
+		f.setSize(new Dimension(xSize,ySize));
+		f.setVisible(true);
 		addListeners();
-		dx = Math.random()*2; // inizializzaione random... in fase di test è inutile :D
-		dy = 2 - dx;
+		dx = 1;//Math.random()*2; // inizializzaione random... in fase di test è inutile :D
+		dy = 0.4;//2 - dx;
 	}
 
 
@@ -125,7 +133,7 @@ public class Pong extends JPanel{
 		});
 	}
 
-	public void updateBallPosition(){
+	public void updateBallPos(){
 		if(ball.x < -BALL_SIZE || ball.y < -BALL_SIZE || ball.x > 480 + BALL_SIZE || ball.y > 500){
 			// se la pallina esce dal bordo incremento un punteggio (nessuno dei due se è uscito proprio sull'angolo)
 			pressSpace = "PRESS SPACE \nTO START";
@@ -145,7 +153,7 @@ public class Pong extends JPanel{
 			double angle = Math.random()*(3*Math.PI/2) - Math.PI/2; // angle va tra 3/2PI e -1/2PI
 			dx = norm*Math.cos(angle);
 			dy = norm*Math.sin(angle);
-			 
+
 		}
 
 		if(ball.x < 11 || ball.x > 460 || ball.y < 11 || ball.y > 470)
@@ -196,6 +204,7 @@ public class Pong extends JPanel{
 				dx = -dx;
 			}
 		}
+		
 		if( ball.x > 474  && ball.x < 485 && dx > 0){
 			if(ball.intersects(rightBase)){// controllo per l'effetto :D
 				System.out.println("Small angle" + Math.abs(ball.y - rightBase.y));
@@ -223,12 +232,13 @@ public class Pong extends JPanel{
 
 			}
 		}
+		
 		if(ball.y < 11 && ball.y > 0 && dy < 0 ){ 
 			if(ball.intersects(highBase)){// controllo per l'effetto :D
-				
+
 				System.out.println("Small angle" + Math.abs(ball.x - highBase.x));
 				if(baseDK != 0);
-					dx += baseDK/4;
+				dx += baseDK/4;
 				if(ball.y < 11 && Math.abs(ball.x +15 - highBase.x) < smallBias){
 					System.out.println("Small bias");	
 
@@ -251,7 +261,7 @@ public class Pong extends JPanel{
 				dy = -dy;
 			}
 		}
-		
+
 		if(ball.y > 474 && ball.y < 485 && dy > 0){
 			if(ball.intersects(lowBase)){// controllo per l'effetto :D
 				if(baseDX != 0)
@@ -275,10 +285,10 @@ public class Pong extends JPanel{
 				}
 				else
 					System.out.println("normal");
-				dy = -dy;
+				dy = -dy; 
 			}
 		}
-		
+
 
 	}
 	public void updateOpponentBase(){ // riceve aggiornamenti dall'altro giocatore sulle proprie posizioni sarebbe carino usare la classe 2dPosition
@@ -288,19 +298,22 @@ public class Pong extends JPanel{
 	public void startElaboration(){ // metodo che chiama un giocatore quando supera la soglia così avvisa l'altro che tocca a lui elaborare la pos.
 
 	}
+	
 	private void updateBasePos(){
 		if((leftBase.getY() + baseDY) >= 0 && (leftBase.getY() + baseDY) <= ySize - BASE_BIG_SIZE -31)
-			leftBase.y += (Math.abs(baseDY) > 6)? baseDY : (baseDY += baseDY/20);
+			leftBase.y += baseDY; // ((Math.abs(baseDY) > 6)? baseDY : (baseDY += baseDY/20));
+
+		//System.out.println("VELOCITAAAAA: " + baseDY);
 
 		if((lowBase.getX() + baseDX) >= 0 && (lowBase.getX()+ baseDX) <= xSize - BASE_BIG_SIZE)
-			lowBase.x += (Math.abs(baseDX) > 6)? baseDX : (baseDX += baseDX/20);
+			lowBase.x += baseDX; // (Math.abs(baseDX) > 6)? baseDX : (baseDX += baseDX/20);
 
 
 		if((rightBase.getY() + baseDZ) >= 0 && (rightBase.getY() + baseDZ) <= ySize - BASE_BIG_SIZE -31)
-			rightBase.y += (Math.abs(baseDZ) > 6)? baseDZ : (baseDZ += baseDZ/20); 
+			rightBase.y += baseDZ; // (Math.abs(baseDZ) > 6)? baseDZ : (baseDZ += baseDZ/20); 
 
 		if((highBase.getX() + baseDK) >= 0 && (highBase.getX()+ baseDK) <= xSize - BASE_BIG_SIZE)
-			highBase.x += (Math.abs(baseDK) > 6)? baseDK : (baseDK += baseDK/20);
+			highBase.x += baseDK; // (Math.abs(baseDK) > 6)? baseDK : (baseDK += baseDK/20);
 	}
 
 	public void paint(Graphics g) {
@@ -327,18 +340,16 @@ public class Pong extends JPanel{
 		g2.drawString(pressSpace, 130,240);
 	}
 
-	public static void startGame(){
-		JFrame f = new JFrame("SuperPong v. 0.2 D:");
-		f.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {System.exit(0);}
-		});
-		Pong applet = new Pong();
-		f.getContentPane().add("Center", applet);
-		f.setSize(new Dimension(xSize,ySize));
-		f.setVisible(true);
+	public void startGame(){
 		while(true){
 			if(running)
-				applet.updateBallPosition();
+				updateBallPos();
+			
+			else{
+				updateBasePos();
+				repaint();
+			}
+			
 			try {
 				Thread.sleep(5);
 			} catch (InterruptedException e1) {
@@ -347,9 +358,36 @@ public class Pong extends JPanel{
 		}
 	}
 
-	public static void main(String[] argv){
-		System.out.println(Math.atan(1/0.0));
-		Pong.startGame();
+	public void setBallPosition(double x, double y){
+		ball.x = x;
+		ball.y = y;
+	}
+	
+	public double getBallX(){
+		return ball.x;
+	}
+	
+	public double getBallY(){
+		return ball.y;
+	}
+	
+	public void setBallSpeed(double dx, double dy) {
+		this.dx = dx;
+		this.dy = dy;
 	}
 
+
+	public double getDx() {
+		return dx;
+	}
+
+
+	public double getDy() {
+		return dy;
+	}
+
+
+	public boolean opponentTurn() {
+		return ball.x > ball.y;
+	}
 }

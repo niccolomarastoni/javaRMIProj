@@ -57,7 +57,7 @@ public class Pong extends JPanel{
 	public Pong(){// qualcuno deve partire con l'elaborazione e poi c'è il problema di come vede ciascun utente la prorpia finestre e
 		super();// come effettivamente funziona il gioco
 		line = new Line2D.Double(0,0,xSize,ySize - 30);
-		ball = new Ellipse2D.Double(250,300,BALL_SIZE,BALL_SIZE);
+		ball = new Ellipse2D.Double(250,250,BALL_SIZE,BALL_SIZE);
 		leftBase = new Rectangle2D.Double(0,225,BASE_SMALL_SIZE,BASE_BIG_SIZE);
 		lowBase = new Rectangle2D.Double(225,490,BASE_BIG_SIZE,BASE_SMALL_SIZE);
 		rightBase = new Rectangle2D.Double(490,225,BASE_SMALL_SIZE,BASE_BIG_SIZE);

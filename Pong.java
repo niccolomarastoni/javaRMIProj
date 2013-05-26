@@ -41,9 +41,14 @@ public class Pong extends JPanel{
 
 	private double dx;
 	private double dy;
+<<<<<<< HEAD
 	private double startPosX;
 	private double startPosY;
 	//private double ballAcceleration = 0;// solo per testing, poi il valore sarà circa 0.00014; // non va bene cicicomerda
+=======
+	//private double ballAcceleration = 0;// solo per testing, poi il valore sarà circa 0.00014; // non va bene cicicomerda
+	private boolean computing = true;
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 	private static boolean running = false;
 	private boolean starting = false;
 	private int startCounter = 450;
@@ -58,9 +63,13 @@ public class Pong extends JPanel{
 	public Pong(double startPosX, double startPosY){
 		super();
 		line = new Line2D.Double(0,0,xSize,ySize - 30);
+<<<<<<< HEAD
 		this.startPosX = startPosX;
 		this.startPosY = startPosY;
 		ball = new Ellipse2D.Double(startPosX,startPosY,BALL_SIZE,BALL_SIZE);
+=======
+		ball = new Ellipse2D.Double(250,250,BALL_SIZE,BALL_SIZE);
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 		leftBase = new Rectangle2D.Double(0,225,BASE_SMALL_SIZE,BASE_BIG_SIZE);
 		lowBase = new Rectangle2D.Double(225,490,BASE_BIG_SIZE,BASE_SMALL_SIZE);
 		rightBase = new Rectangle2D.Double(490,225,BASE_SMALL_SIZE,BASE_BIG_SIZE);
@@ -101,7 +110,11 @@ public class Pong extends JPanel{
 				break;
 				case 68: baseDX = baseSpeed; //d
 				break;
+<<<<<<< HEAD
 			/*	// da qui in poi opponent, per testing (oppure poi facciamo configurabile, qualcuno preferisce freccette)
+=======
+				// da qui in poi opponent, per testing (oppure poi facciamo configurabile, qualcuno preferisce freccette)
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 				case 38: baseDZ = -baseSpeed;
 				break;
 				case 40: baseDZ = baseSpeed;
@@ -142,13 +155,18 @@ public class Pong extends JPanel{
 		});
 	}
 
+<<<<<<< HEAD
 	public void updateBallPos(){//il primo if va trasformato in un metodo così l'altro può chiamarlo in caso di ritadi sulla rete e aggiornare il punteggio
+=======
+	public void updateBallPos(){
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 		if(ball.x < -BALL_SIZE || ball.y < -BALL_SIZE || ball.x > 480 + BALL_SIZE || ball.y > 500){
 			// se la pallina esce dal bordo incremento un punteggio (nessuno dei due se è uscito proprio sull'angolo)
 			pressSpace = "PRESS SPACE \nTO START";
 			p1Score += (ball.x < -BALL_SIZE ||  ball.y > 500)?0:1;
 			p2Score += (ball.y < -BALL_SIZE || ball.x > 480 + BALL_SIZE)?0:1;
 			running = false;
+<<<<<<< HEAD
 			// riprisitiniamo anche la posizione delle basi
 			lowBase.x = 225; lowBase.y = 490;
 			highBase.x = 225; highBase.y = 0;
@@ -164,6 +182,18 @@ public class Pong extends JPanel{
 			//dy = -1.4;
 			/* codice per ininizializzaione random*/
 			double norm = 1.5;  //Math.sqrt(dx*dx + dy*dy);
+=======
+
+			ball.x = 250;
+			ball.y = 250;
+			// ad ogni nuovo round diamo una piccola accelerazione in più;
+			ball.x += dx*(1 + dx*0.0002); //:D
+			ball.y += dy*(1 + dy*0.0002);  //:D
+			//dx = -0.6;//facciamo l'inizializzazione random
+			//dy = -1.4;
+			/* codice per ininizializzaione random*/
+			double norm = Math.sqrt(dx*dx + dy*dy);
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 			double angle = Math.random()*(3*Math.PI/2) - Math.PI/2; // angle va tra 3/2PI e -1/2PI
 			dx = norm*Math.cos(angle);
 			dy = norm*Math.sin(angle);
@@ -218,8 +248,20 @@ public class Pong extends JPanel{
 				dx = -dx;
 			}
 		}
+<<<<<<< HEAD
 
 		/*if( ball.x > 474  && ball.x < 485 && dx > 0){
+			if(ball.intersects(rightBase)){// controllo per l'effetto :D
+				System.out.println("Small angle" + Math.abs(ball.y - rightBase.y));
+				if(baseDZ != 0)
+					dx += baseDZ/4;
+				if(ball.x > 474 && Math.abs(ball.y + 10 - rightBase.y) < smallBias){// piccolo aggiustamento perchè si trova a destra D:
+					System.out.println("Small bias");	
+
+					angle = Math.atan(((dy < 0) ? 16*(dx/dy) : (dx/dy))/8);
+=======
+
+		if( ball.x > 474  && ball.x < 485 && dx > 0){
 			if(ball.intersects(rightBase)){// controllo per l'effetto :D
 				System.out.println("Small angle" + Math.abs(ball.y - rightBase.y));
 				if(baseDZ != 0)
@@ -232,6 +274,16 @@ public class Pong extends JPanel{
 					dx = norm*Math.cos(angle);
 					System.out.println("dx"+dx +"dy"+ dy);
 				}
+				else if(ball.x > 474 && Math.abs(ball.y - rightBase.y) > bigBias){
+					System.out.println("Big bias");
+
+					angle = Math.atan(((dy > 0) ? 16*(dx/dy) : (dx/dy))/8);
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
+					dy = norm*Math.sin(angle);
+					dx = norm*Math.cos(angle);
+					System.out.println("dx"+dx +"dy"+ dy);
+				}
+<<<<<<< HEAD
 				else if(ball.x > 474 && Math.abs(ball.y - rightBase.y) > bigBias){
 					System.out.println("Big bias");
 
@@ -276,6 +328,44 @@ public class Pong extends JPanel{
 			}
 		}*/
 
+=======
+				else
+					System.out.println("normal");
+				dx = -dx;
+
+			}
+		}
+
+		if(ball.y < 11 && ball.y > 0 && dy < 0 ){ 
+			if(ball.intersects(highBase)){// controllo per l'effetto :D
+
+				System.out.println("Small angle" + Math.abs(ball.x - highBase.x));
+				if(baseDK != 0);
+				dx += baseDK/4;
+				if(ball.y < 11 && Math.abs(ball.x +15 - highBase.x) < smallBias){
+					System.out.println("Small bias");	
+
+					angle = Math.atan(((dx < 0) ? 16*(dx/dy): (dx/dy))/8);
+					dy = -norm*Math.cos(angle);
+					dx = -norm*Math.sin(angle);
+					System.out.println("dx"+dx +"dy"+ dy);
+				}
+				else if(ball.y < 11  && Math.abs(ball.x - highBase.x) > bigBias){
+					System.out.println("Big bias");
+
+					angle = Math.atan(((dx > 0) ? 16*(dx/dy) : (dx/dy))/8);
+					System.out.println("Angle "+angle);
+					dy = -norm*Math.cos(angle);
+					dx = -norm*Math.sin(angle);
+					System.out.println("dx"+dx +"dy"+ dy);
+				}
+				else
+					System.out.println("normal");
+				dy = -dy;
+			}
+		}
+
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 		if(ball.y > 474 && ball.y < 485 && dy > 0){
 			if(ball.intersects(lowBase)){// controllo per l'effetto :D
 				if(baseDX != 0)
@@ -317,6 +407,7 @@ public class Pong extends JPanel{
 	private void updateBasePos(){
 		if((leftBase.getY() + baseDY) >= 0 && (leftBase.getY() + baseDY) <= ySize - BASE_BIG_SIZE -31)
 			leftBase.y += baseDY; // ((Math.abs(baseDY) > 6)? baseDY : (baseDY += baseDY/20));
+<<<<<<< HEAD
 
 		//System.out.println("VELOCITAAAAA: " + baseDY);
 
@@ -329,6 +420,20 @@ public class Pong extends JPanel{
 
 		if((highBase.getX() + baseDK) >= 0 && (highBase.getX()+ baseDK) <= xSize - BASE_BIG_SIZE)
 			highBase.x += baseDK; // (Math.abs(baseDK) > 6)? baseDK : (baseDK += baseDK/20);*/
+=======
+
+		//System.out.println("VELOCITAAAAA: " + baseDY);
+
+		if((lowBase.getX() + baseDX) >= 0 && (lowBase.getX()+ baseDX) <= xSize - BASE_BIG_SIZE)
+			lowBase.x += baseDX; // (Math.abs(baseDX) > 6)? baseDX : (baseDX += baseDX/20);
+
+
+		if((rightBase.getY() + baseDZ) >= 0 && (rightBase.getY() + baseDZ) <= ySize - BASE_BIG_SIZE -31)
+			rightBase.y += baseDZ; // (Math.abs(baseDZ) > 6)? baseDZ : (baseDZ += baseDZ/20); 
+
+		if((highBase.getX() + baseDK) >= 0 && (highBase.getX()+ baseDK) <= xSize - BASE_BIG_SIZE)
+			highBase.x += baseDK; // (Math.abs(baseDK) > 6)? baseDK : (baseDK += baseDK/20);
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 	}
 
 	public void paint(Graphics g) {
@@ -344,8 +449,11 @@ public class Pong extends JPanel{
 			g2.setColor(Color.BLACK);
 			g2.fill(ball);
 		}
+<<<<<<< HEAD
 		//if(running && !starting)
 			updateBasePos();
+=======
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 		//g2.draw(ball);
 		g2.setColor(Color.BLUE);
 		g2.fill(lowBase);
@@ -362,7 +470,11 @@ public class Pong extends JPanel{
 
 			if(startCounter-- == 0){
 				starting = false;
+<<<<<<< HEAD
 				startCounter = 450;// se dovesse dare problemi qui c'è la soluzione
+=======
+				startCounter = 450;
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 			}
 		}
 	}
@@ -373,6 +485,10 @@ public class Pong extends JPanel{
 				updateBallPos();
 
 			else{
+<<<<<<< HEAD
+=======
+				updateBasePos();
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 				repaint();
 			}
 
@@ -400,6 +516,7 @@ public class Pong extends JPanel{
 	public void setBallSpeed(double dx, double dy) {
 		this.dx = dx;
 		this.dy = dy;
+<<<<<<< HEAD
 	}
 
 
@@ -435,5 +552,22 @@ public class Pong extends JPanel{
 
 	public void setRightBasePos(double baseY) {
 		rightBase.y = baseY;
+=======
+	}
+
+
+	public double getDx() {
+		return dx;
+	}
+
+
+	public double getDy() {
+		return dy;
+	}
+
+
+	public boolean opponentTurn() {
+		return ball.x > ball.y;
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 	}
 }

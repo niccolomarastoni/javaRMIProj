@@ -18,9 +18,15 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 	private ClientRemoteInterface opponent = null;
 	private boolean myTurn = true;
 
+<<<<<<< HEAD
 	public ServerPong(){// il sistema di punteggio va controllato 
 		pong = new Pong(249.0,250.0);// l'avversario si prende invece 251 e 249 così è il parte sempre per primo uno e fornisce all'altro dx dy ecc.
 		try { // da verificare se con questa posizione il server fa in tempo fare la sicronizzazione prima che ci sia il casino D:
+=======
+	public ServerPong(){
+		pong = new Pong();
+		try {
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 			Registry registry = LocateRegistry.createRegistry(1099);
 			UnicastRemoteObject.exportObject(this, 5000);
 			registry.rebind("PongServer", this);
@@ -33,9 +39,15 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 		opponent = (ClientRemoteInterface)Naming.lookup(ip + ":1099/PongServer");
 	}
 
+<<<<<<< HEAD
 	public void setOpponent() throws RemoteException{ // l'avversario ha dx e dy uguali e opposti
 		if(myTurn)
 			opponent.setBallSpeed( -pong.getDx(), -pong.getDy());
+=======
+	public void setOpponent() throws RemoteException{
+		if(myTurn)
+			opponent.setBallSpeed(pong.getDx(),pong.getDy());
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 
 		//System.out.println(opponent);
 	}
@@ -44,18 +56,46 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 		pong.setBallSpeed(dx, dy);
 	}
 
+<<<<<<< HEAD
+=======
+	public static void main(String[] argv){
+		ServerPong sPong = new ServerPong();
+
+		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Server attivo\nPremi invio");
+		try {
+			in.readLine();
+			sPong.getOpponent();
+			sPong.setOpponent();
+			sPong.init();
+		} 
+		catch (RemoteException e){
+			// jizz
+		}catch (IOException e) {
+			e.printStackTrace();
+		} catch (NotBoundException e) {
+			e.printStackTrace();
+		}
+	}
+
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 	private void init() throws RemoteException{
 		double [] update;
 		pong.startGame(); // facciamolo thread, che non muoia!!
 		
 		while(true){
 			if(pong.opponentTurn()){
+<<<<<<< HEAD
 				update = opponent.Update(pong.getLowBasePos(), pong.getLeftBasePos());
+=======
+				update = opponent.getUpdate();
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 				check(update);
 			}
 		}
 	}
 
+<<<<<<< HEAD
 	@Override
 	public double[] Update(double baseX, double baseY) throws RemoteException {// i due giocatori hanno lo dx e dy uguali e opposti(in teoria)
 		
@@ -66,6 +106,8 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 		
 	}
 	
+=======
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 	private void check(double[] update) {
 		double delta = 0.5; 
 		if(Math.abs(pong.getBallX() - update[0]) > delta || Math.abs(pong.getBallY() - update[1]) > delta ){
@@ -75,6 +117,7 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 		if(pong.getDx() != update[2] || pong.getDy() != update[3]){
 			pong.setBallSpeed(update[2], update[3]);
 		}
+<<<<<<< HEAD
 		pong.setHighBasePos(update[4]);
 		pong.setRightBasePos(update[5]);
 	}
@@ -97,6 +140,14 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 		} catch (NotBoundException e) {
 			e.printStackTrace();
 		}
+=======
+	}
+
+	@Override
+	public double[] getUpdate() throws RemoteException {
+		double [] ret = {pong.getBallX(), pong.getBallY(), pong.getDx(), pong.getDy()};
+		return ret;
+>>>>>>> 5ff721bf92b97b1a352c61bd0b84bcf7c8ac70f0
 	}
 
 }

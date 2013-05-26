@@ -33,17 +33,20 @@ public class Pong extends JPanel{
 
 	private String p1Name = "Player 1";
 	private String p2Name = "Player 2";
-	private String pressSpace = "";
+	private String pressSpace = "PRESS SPACE \nTO START";
 
 	// punteggi player 1 e 2
 	private int p1Score = 0;
 	private int p2Score = 0;
-	
+
 	private double dx;
 	private double dy;
 	//private double ballAcceleration = 0;// solo per testing, poi il valore sarà circa 0.00014; // non va bene cicicomerda
 	private boolean computing = true;
 	private static boolean running = false;
+	private boolean starting = false;
+	private int startCounter = 450;
+	private int baseFontSize = 180;
 	private Line2D.Double line;
 	private Ellipse2D.Double ball;
 	private Rectangle2D.Double leftBase;
@@ -83,6 +86,9 @@ public class Pong extends JPanel{
 				switch(arg.getKeyCode()){//da poterli fermare ai bordi sarebbe fichissimo accelerare il movimento se il tasto è premuto per un tot.
 				case 32: running = !running; // spazio per mettere in pausa o far ripartire un gioco
 				pressSpace = "";
+				if(running)
+					starting = true;
+
 				break;
 				case 87: baseDY = -baseSpeed; //w
 				break;
@@ -141,7 +147,7 @@ public class Pong extends JPanel{
 			p2Score += (ball.y < -BALL_SIZE || ball.x > 480 + BALL_SIZE)?0:1;
 			running = false;
 
-			ball.x = 300;
+			ball.x = 250;
 			ball.y = 250;
 			// ad ogni nuovo round diamo una piccola accelerazione in più;
 			ball.x += dx*(1 + dx*0.0002); //:D
@@ -204,7 +210,7 @@ public class Pong extends JPanel{
 				dx = -dx;
 			}
 		}
-		
+
 		if( ball.x > 474  && ball.x < 485 && dx > 0){
 			if(ball.intersects(rightBase)){// controllo per l'effetto :D
 				System.out.println("Small angle" + Math.abs(ball.y - rightBase.y));
@@ -232,7 +238,7 @@ public class Pong extends JPanel{
 
 			}
 		}
-		
+
 		if(ball.y < 11 && ball.y > 0 && dy < 0 ){ 
 			if(ball.intersects(highBase)){// controllo per l'effetto :D
 
@@ -298,7 +304,7 @@ public class Pong extends JPanel{
 	public void startElaboration(){ // metodo che chiama un giocatore quando supera la soglia così avvisa l'altro che tocca a lui elaborare la pos.
 
 	}
-	
+
 	private void updateBasePos(){
 		if((leftBase.getY() + baseDY) >= 0 && (leftBase.getY() + baseDY) <= ySize - BASE_BIG_SIZE -31)
 			leftBase.y += baseDY; // ((Math.abs(baseDY) > 6)? baseDY : (baseDY += baseDY/20));
@@ -322,13 +328,14 @@ public class Pong extends JPanel{
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g2.setColor(Color.LIGHT_GRAY);
-
 		g2.setFont(new Font("myFont",1,80));
 		g2.drawString(String.valueOf(p1Score), 120, 400);
 		g2.drawString(String.valueOf(p2Score), 320, 180);
 		g2.draw(line);
-		g2.setColor(Color.BLACK);
-		g2.fill(ball);
+		if(!starting){
+			g2.setColor(Color.BLACK);
+			g2.fill(ball);
+		}
 		//g2.draw(ball);
 		g2.setColor(Color.BLUE);
 		g2.fill(lowBase);
@@ -338,18 +345,28 @@ public class Pong extends JPanel{
 		g2.fill(rightBase);
 		g2.setFont(new Font("myFont",1,20));
 		g2.drawString(pressSpace, 130,240);
+		if(starting){ 
+			int shift = 150 - (startCounter % 150);
+			g2.setFont(new Font("myFont",1,(baseFontSize - shift)));
+			g2.drawString(String.valueOf(startCounter/150 + 1),180 + (shift /2), 320 - (shift / 2));
+
+			if(startCounter-- == 0){
+				starting = false;
+				startCounter = 450;
+			}
+		}
 	}
 
 	public void startGame(){
 		while(true){
-			if(running)
+			if(running && !starting)
 				updateBallPos();
-			
+
 			else{
 				updateBasePos();
 				repaint();
 			}
-			
+
 			try {
 				Thread.sleep(5);
 			} catch (InterruptedException e1) {
@@ -362,15 +379,15 @@ public class Pong extends JPanel{
 		ball.x = x;
 		ball.y = y;
 	}
-	
+
 	public double getBallX(){
 		return ball.x;
 	}
-	
+
 	public double getBallY(){
 		return ball.y;
 	}
-	
+
 	public void setBallSpeed(double dx, double dy) {
 		this.dx = dx;
 		this.dy = dy;

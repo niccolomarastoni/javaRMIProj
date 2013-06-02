@@ -186,7 +186,7 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 			rightBase = new Rectangle2D.Double(490,225,BASE_SMALL_SIZE,BASE_BIG_SIZE);
 			highBase =new Rectangle2D.Double(225,0,BASE_BIG_SIZE,BASE_SMALL_SIZE);
 			this.setFocusable(true);
-			JFrame f = new JFrame("SuperPong v. 0.2 D:");
+			JFrame f = new JFrame("SuperPong v. 0.4 :D");
 			f.addWindowListener(new WindowAdapter() {
 				public void windowClosing(WindowEvent e) {System.exit(0);}
 			});
@@ -310,8 +310,9 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 				//dx = -0.6;//facciamo l'inizializzazione random
 				//dy = -1.4;
 				/* codice per ininizializzaione random*/
-				double norm = 1.5; //Math.sqrt(dx*dx + dy*dy);
-				double angle = Math.random()*(3*Math.PI/2) - Math.PI/2; // angle va tra 3/2PI e -1/2PI
+				double angle = Math.random()*2.0*Math.PI/18 - Math.PI/18;
+				int rotation =(int) (Math.random()*5.0);
+				angle += rotation*Math.PI/2;
 				dx = norm*Math.cos(angle);
 				dy = norm*Math.sin(angle);
 

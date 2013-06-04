@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 
 
 public class ServerPong extends RemoteServer implements ClientRemoteInterface{
-	String ip = "//157.27.241.194";
+	String ip = "//157.27.241.179";
 	private Pong pong;
 	private ClientRemoteInterface opponent = null;
 	private static boolean myTurn = true;
@@ -52,7 +52,7 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 
 	@Override
 	public void setBall(double dx, double dy, double x, double y) throws RemoteException{
-		//System.out.println("Setto dx = " + dx + " dy =  " + dy);
+		//System.out.println("Setto dx = " + dx + " dy = " + dy);
 		pong.ball.x = x;
 		pong.ball.y = y;
 		pong.dx = dx;
@@ -208,7 +208,7 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 					//System.out.println(arg.getKeyCode());
 					switch(arg.getKeyCode()){//da poterli fermare ai bordi sarebbe fichissimo accelerare il movimento se il tasto è premuto per un tot.
 					case 32:
-						if(singlePlayer){	
+						if(singlePlayer){
 							running = !running; // spazio per mettere in pausa o far ripartire un gioco
 							pressSpace = "";
 							if(running)
@@ -304,6 +304,7 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 
 				ball.x = startPosX;
 				ball.y = startPosY;
+				double norm = 1.5;
 				// ad ogni nuovo round diamo una piccola accelerazione in più;
 				//ball.x += dx*(1 + dx*0.0002); //:D
 				//ball.y += dy*(1 + dy*0.0002); //:D
@@ -328,7 +329,7 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 				if(!singlePlayer && (dx != tempDx || dy != tempDy)){
 					ServerPong.this.updateOpponentBallSpeed();
 					//System.out.println("URTO");
-				}				
+				}
 			}
 
 			ball.x += dx*(1 + dx*0.00014);
@@ -494,7 +495,7 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 			}
 		}
 
-		public void startGame(){			
+		public void startGame(){
 			while(true){
 				if(baseUpdate)
 					ServerPong.this.updateOpponentBase();
@@ -520,7 +521,7 @@ public class ServerPong extends RemoteServer implements ClientRemoteInterface{
 
 		@Override
 		public void run() {
-			startGame();		
+			startGame();
 		}
 	}
 

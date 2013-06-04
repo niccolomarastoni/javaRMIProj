@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 
 
 public class ServerPong extends RemoteServer implements ClientRemoteInterface{
-	String ip = "//157.27.241.179";
+	String ip = "//157.27.241.178";
 	private Pong pong;
 	private ClientRemoteInterface opponent = null;
 	private static boolean myTurn = true;

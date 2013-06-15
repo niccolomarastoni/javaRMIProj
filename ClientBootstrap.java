@@ -12,13 +12,23 @@ public class ClientBootstrap {
 	public static void main(String [] argv){
 		String ip;
 		Bootstrap bs;
+		Runnable client;
+		System.setSecurityManager(new SecurityManager());
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		System.out.print("Identification Server IP: ");
+		    
 		try {
-			ip = in.readLine();
+    		if(argv.length == 0){
+    		    System.out.print("Identification Server IP: ");
+    			ip = in.readLine();
+    			}
+    		else
+    		    ip = argv[0];
+    		    
 			bs = (Bootstrap)Naming.lookup("//" + ip + "/IdentificationServer");
 			bs.getClient().run();
+			
 		} catch(RemoteException e){
+			e.printStackTrace();
 			// TODODODODODOD
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

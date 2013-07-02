@@ -1,3 +1,5 @@
+package tetraPong;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,37 +18,7 @@ public class Login extends JFrame implements Runnable{
 	public Login(){
 		//		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		//	this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-		this.setSize(300,200);
-		getContentPane().setLayout(null);
-		login = new loginButton();
-		cancel = new cancelButton();
-		userArea = new JTextArea("User: ");
-		userArea.setFont(new Font("myFont",1,16));
-		userArea.setEditable(false);
-		userArea.setVisible(true);
-		userArea.setBounds(10,10,50,30);
-		passArea = new JTextArea("Pass: ");
-		passArea.setFont(new Font("myFont",1,16));
-		passArea.setEditable(false);
-		passArea.setBounds(10,44,50,30);
-		user = new JTextField();
-		password = new JTextField();
-		user.setBounds(80, 5, 200, 30);
-		getContentPane().add(login);
-		getContentPane().add(cancel);
-		getContentPane().add(user);
-		getContentPane().add(userArea);
-		getContentPane().add(passArea);
-		password.setBounds(80,40,200,30);
-
-
-		getContentPane().add(password);
-
-		setResizable(true);
-		setLocationRelativeTo(null);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		setVisible(true);
+		
 	}
 
 	private class cancelButton extends JButton{
@@ -80,12 +52,42 @@ public class Login extends JFrame implements Runnable{
 	}
 
 	public static void main(String argv[]){
-		new Login();
+		//new Login();
 	}
 
 	@Override
 	public void run() {
+		this.setSize(300,200);
+		getContentPane().setLayout(null);
+		login = new loginButton();
+		cancel = new cancelButton();
+		userArea = new JTextArea("User: ");
+		userArea.setFont(new Font("myFont",1,16));
+		userArea.setEditable(false);
+		userArea.setVisible(true);
+		userArea.setBounds(10,10,50,30);
+		passArea = new JTextArea("Pass: ");
+		passArea.setFont(new Font("myFont",1,16));
+		passArea.setEditable(false);
+		passArea.setBounds(10,44,50,30);
+		user = new JTextField();
+		password = new JTextField();
+		user.setBounds(80, 5, 200, 30);
+		getContentPane().add(login);
+		getContentPane().add(cancel);
+		getContentPane().add(user);
+		getContentPane().add(userArea);
+		getContentPane().add(passArea);
+		password.setBounds(80,40,200,30);
 
+
+		getContentPane().add(password);
+
+		setResizable(true);
+		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		setVisible(true);
 	}
 
 }

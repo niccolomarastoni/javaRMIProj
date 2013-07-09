@@ -1,5 +1,6 @@
 package tetraPong;
 
+import java.io.IOException;
 import java.rmi.NoSuchObjectException;
 import java.rmi.MarshalledObject;
 import java.rmi.Remote;
@@ -8,28 +9,46 @@ import java.rmi.activation.Activatable;
 import java.rmi.activation.ActivationException;
 import java.rmi.activation.ActivationID;
 import java.rmi.activation.UnknownObjectException;
+import java.rmi.server.RemoteObject;
 import java.rmi.server.Unreferenced;
+import java.rmi.server.UnicastRemoteObject;
 
 @SuppressWarnings("serial")
 public class AutenticationServer extends Activatable 
 								implements Bootstrap, Autentication, Unreferenced{
-	public AutenticationServer(ActivationID id,MarshalledObject obj) throws RemoteException{
+	MainInterface mainRef;
+	public AutenticationServer(ActivationID id,MarshalledObject obj) throws IOException, ClassNotFoundException{
+		//nel marshalledobject ci va il mainserver
 		super(id,3000);
+		mainRef = (MainInterface)obj.get();
 		System.out.println("Autentication su! " + id);
+		
+	}
+	
+	private int checkLogin(String username, String password){
+		return 1; //0 = client 1 = admin -1 = error		
 	}
 
-	public boolean login(String username, String password)throws RemoteException{
-
-		return false;
+	public int login(String username, String password)throws RemoteException{
+		//if(verifica che sia client)
+		//return main.getClient();
+	/*	switch(checkLogin(username,password)){
+		case 0: return mainRef.getClient();
+		case 1: //Admin cic =  mainRef.getAdmin();
+						//System.out.println("ADmin :D "+ cic);
+						System.out.println("Login() restituisce " + admin);
+						return mainRef.getAdmin();
+		default: return null;*/
+		return 1;
 	}
 
 	public boolean register(String username, String password)throws RemoteException{
 
 		return false;
 	}
-
-	public Remote getMainServer() throws RemoteException{
-		return null;
+	@Override
+	public MainInterface getMainServer() throws RemoteException{
+		return mainRef;
 	}
 	@Override
 	public void unreferenced() {
@@ -54,6 +73,6 @@ public class AutenticationServer extends Activatable
 
 	@Override
 	public Runnable getClient() throws RemoteException {
-		return new Login();
+		return new Login(this);
 	}	
 }

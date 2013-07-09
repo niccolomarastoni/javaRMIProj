@@ -1,6 +1,8 @@
 package tetraPong;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.rmi.MarshalledObject;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.activation.Activatable;
@@ -14,7 +16,7 @@ import java.util.Properties;
 public class Setup{
 	//codebase su file e popup di configurazione
 	public static void main(String[] argv){
-		String codebase = "http://157.27.241.170:8000/common/";
+		String codebase = "http://157.27.241.252:8000/common/";
 		String autenticationServerClass = "tetraPong.AutenticationServer";
 		String mainServerClass = "tetraPong.MainServer";
 		String policyGroup1 = "/home/accounts/studenti/id284txe/javarmi/tetraPong/group.policy";
@@ -42,14 +44,16 @@ public class Setup{
 			ActivationGroupID gID1 = ActivationGroup.getSystem().registerGroup(gDesc1);
 			ActivationGroupID gID2 = ActivationGroup.getSystem().registerGroup(gDesc2);
 
-			ActivationDesc autenticationServerDesc = new ActivationDesc(gID1, autenticationServerClass, codebase, null);
 			ActivationDesc mainServerDesc = new ActivationDesc(gID2, mainServerClass, codebase, null);
 
+			MainInterface mainInt = (MainInterface)Activatable.register(mainServerDesc);
+			MarshalledObject data = new MarshalledObject(mainInt);
+			ActivationDesc autenticationServerDesc = new ActivationDesc(gID1, autenticationServerClass, codebase, data);
 			Bootstrap autenticationStub = (Bootstrap)Activatable.register(autenticationServerDesc);
 			System.out.println("Stubbe: " + autenticationStub);
-			Activatable.register(mainServerDesc);// come passiamo lo stub all'autentication??? D:
 
 			Naming.rebind("//:1099/AutenticationServer", autenticationStub);
+			
 
 
 		}catch(RemoteException e){
@@ -57,6 +61,9 @@ public class Setup{
 		} catch (ActivationException e) {
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

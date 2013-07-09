@@ -1,5 +1,5 @@
 java -classpath :/home/accounts/studenti/id284txe/public_html/common/ tetraPong.Setup
 
-rmid -log /home/accounts/studenti/id284txe/javarmi/tetraPong/log-rmid/ -J-Djava.rmi.server.codebase=http://157.27.241.170:8000/common/ -J-Djava.security.policy=/home/accounts/studenti/id284txe/javarmi/tetraPong/rmid.policy &
+rmid -log /home/accounts/studenti/id284txe/javarmi/tetraPong/log-rmid/ -J-Djava.rmi.server.codebase=http://157.27.241.204:8000/common/ -J-Djava.security.policy=/home/accounts/studenti/id284txe/javarmi/tetraPong/rmid.policy &
 rmic -d /home/accounts/studenti/id284txe/public_html/common/ tetraPong.AutenticationServer
 

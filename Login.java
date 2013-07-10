@@ -68,13 +68,21 @@ public class Login extends JFrame implements Runnable{
 								System.out.println("Sono istanza di AUI");								
 								AdminUserInterface admin = mainRef.getAdmin();
 								admin.startAdmin();
-							}else;
+							}else {
+								System.out.println("ciao");	
+								SetupClient setupClient = mainRef.getClient();
+								System.out.println("ciao passato");		
+								TetraPongProxy game = (TetraPongProxy)setupClient.init();
+								System.out.println("ciao passato di nuovo");		
+								game.activate();
+								System.out.println("Game is up! :|]");
+							}
 								
 						}
 						System.exit(0);
 					} catch (RemoteException e) {
 						// TODO Auto-generated catch block
-						System.out.println("Remote ref a "+rem);
+						System.out.println("I'm a catchman "+rem);
 						e.printStackTrace();
 					}
 

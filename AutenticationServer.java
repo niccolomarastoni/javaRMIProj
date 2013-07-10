@@ -26,7 +26,7 @@ public class AutenticationServer extends Activatable
 	}
 	
 	private int checkLogin(String username, String password){
-		return 1; //0 = client 1 = admin -1 = error		
+		return 0; //0 = client 1 = admin -1 = error		
 	}
 
 	public int login(String username, String password)throws RemoteException{
@@ -39,7 +39,7 @@ public class AutenticationServer extends Activatable
 						System.out.println("Login() restituisce " + admin);
 						return mainRef.getAdmin();
 		default: return null;*/
-		return 1;
+		return 0;
 	}
 
 	public boolean register(String username, String password)throws RemoteException{

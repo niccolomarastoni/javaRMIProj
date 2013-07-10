@@ -11,8 +11,11 @@ import java.rmi.server.RemoteObject;
 import java.rmi.server.Unreferenced;
 import java.rmi.server.UnicastRemoteObject;
 
-public class MainServer extends Activatable implements Unreferenced, MainInterface, AdminServerInterface{
+public class MainServer extends Activatable 
+implements Unreferenced, MainInterface, AdminServerInterface,ProxyToMainInterface{
 	private AdminUserInterface admin;
+	private ClientRemoteInterface player1 = null;
+	private ClientRemoteInterface player2 = null;
 	protected MainServer(ActivationID id, MarshalledObject data) throws RemoteException {
 		super(id, 3001);
 		System.out.println("Main su le mani!" + id);
@@ -50,9 +53,8 @@ public class MainServer extends Activatable implements Unreferenced, MainInterfa
 	}
 
 	@Override
-	public RemoteObject getClient() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	public SetupClient getClient() throws RemoteException {
+		return new SetupClient((ProxyToMainInterface)this);
 	}
 
 	@Override
@@ -61,6 +63,31 @@ public class MainServer extends Activatable implements Unreferenced, MainInterfa
 		System.out.println("stub admin = " + admin);
 		return "YEAH";
 	}
-	
-	
+
+	@Override
+	public ClientRemoteInterface getOpponent(int id) throws RemoteException {
+		if(id == 1)
+			return player1;
+		else
+			return player2;
+	}
+
+	@Override
+	public boolean registerPlayer(ClientRemoteInterface player)
+	throws RemoteException {
+		if(player1 == null && player2 == null){
+			player1 = player;
+			System.out.println("Registering p1 = "+player1);
+		}
+		else if(player2 == null && player1 != null){
+			player2 = player;
+			System.out.println("Registering p2 = "+player2);
+			player1.gameReady(2);
+			player2.gameReady(1);
+		}
+		else return false;
+		return true;
+	}
+
+
 }

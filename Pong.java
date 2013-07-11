@@ -48,6 +48,7 @@ public class Pong extends JPanel implements Runnable{
 		//private double ballAcceleration = 0;// solo per testing, poi il valore sarà circa 0.00014; // non va bene cicicomerda
 		boolean running = false;
 		private boolean singlePlayer = false;
+		private boolean enabled = true;
 		boolean starting = false;
 		private boolean baseUpdate = false;
 		private int startCounter = 450;
@@ -61,6 +62,7 @@ public class Pong extends JPanel implements Runnable{
 
 		public Pong(ServerPong serverPong){
 			super();
+			this.serverPong = serverPong;
 			line = new Line2D.Double(0,0,xSize,ySize - 30);
 			ball = new Ellipse2D.Double(startPosX,startPosY,BALL_SIZE,BALL_SIZE);
 			leftBase = new Rectangle2D.Double(0,225,BASE_SMALL_SIZE,BASE_BIG_SIZE);
@@ -70,16 +72,22 @@ public class Pong extends JPanel implements Runnable{
 			this.setFocusable(true);
 			JFrame f = new JFrame("tetraPong v. 0.5 (\\|) ( 0,,,0) (|/)");
 			f.addWindowListener(new WindowAdapter() {
-				public void windowClosing(WindowEvent e) {System.exit(0);}
+				public void windowClosing(WindowEvent e) {
+					running = false;
+					starting = false;
+					enabled = false;
+					Pong.this.serverPong.closeGame();
+					}
 			});
-
 			f.getContentPane().add("Center", this);
 			f.setSize(new Dimension(xSize,ySize));
 			f.setVisible(true);
 			addListeners();
 			dx = -0.4;//Math.random()*2; // inizializzaione random... in fase di test è inutile :D
 			dy = -1;//2 - dx;
-			this.serverPong = serverPong;
+		}
+		public void deleteProxyRef(){
+			serverPong = null;
 		}
 		public void addListeners(){
 
@@ -377,7 +385,7 @@ public class Pong extends JPanel implements Runnable{
 		}
 
 		public void startGame(){
-			while(true){
+			while(enabled){
 				if(baseUpdate)
 					serverPong.updateOpponentBase();
 

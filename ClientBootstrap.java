@@ -15,6 +15,9 @@ public class ClientBootstrap {
 		String ip;
 		Bootstrap bs;
 		Runnable client;
+		String HOME_DIR = System.getProperty("user.home");
+		System.setProperty("javax.net.ssl.trustStore", HOME_DIR + "/javarmi/tetraPong/loginClient.keystore");
+		System.setProperty("javax.net.ssl.trustStorePassword","loginClient");
 		System.setSecurityManager(new SecurityManager());
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 

@@ -7,7 +7,6 @@ import java.rmi.activation.Activatable;
 import java.rmi.activation.ActivationException;
 import java.rmi.activation.ActivationID;
 import java.rmi.activation.UnknownObjectException;
-import java.rmi.server.RemoteObject;
 import java.rmi.server.Unreferenced;
 import java.rmi.server.UnicastRemoteObject;
 
@@ -26,7 +25,7 @@ implements Unreferenced, MainInterface, AdminServerInterface,ProxyToMainInterfac
 	public void unreferenced() {	
 		System.out.println("I'm trying to die!(Main)");
 		try {
-			if(Activatable.unexportObject(this, true))
+			if(Activatable.unexportObject(this, false))
 				Activatable.inactive(getID());
 		} catch (NoSuchObjectException e) {
 			// TODO Auto-generated catch block
@@ -87,6 +86,16 @@ implements Unreferenced, MainInterface, AdminServerInterface,ProxyToMainInterfac
 		}
 		else return false;
 		return true;
+	}
+
+	@Override
+	public void unregisterPlayer() throws RemoteException {
+		player1 = null;
+		player2 = null;
+		System.out.println("Player Unregistered");
+
+		System.gc();
+		
 	}
 
 

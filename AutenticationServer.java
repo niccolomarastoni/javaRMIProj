@@ -13,13 +13,16 @@ import java.rmi.server.RemoteObject;
 import java.rmi.server.Unreferenced;
 import java.rmi.server.UnicastRemoteObject;
 
+import javax.rmi.ssl.SslRMIClientSocketFactory;
+import javax.rmi.ssl.SslRMIServerSocketFactory;
+
 @SuppressWarnings("serial")
 public class AutenticationServer extends Activatable 
 								implements Bootstrap, Autentication, Unreferenced{
 	MainInterface mainRef;
 	public AutenticationServer(ActivationID id,MarshalledObject obj) throws IOException, ClassNotFoundException{
 		//nel marshalledobject ci va il mainserver
-		super(id,3000);
+		super(id,3000, new SslRMIClientSocketFactory(), new SslRMIServerSocketFactory());
 		mainRef = (MainInterface)obj.get();
 		System.out.println("Autentication su! " + id);
 		

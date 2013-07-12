@@ -1,16 +1,10 @@
 package tetraPong;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.rmi.MarshalledObject;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.activation.Activatable;
 import java.rmi.activation.ActivationID;
 import java.rmi.server.Unreferenced;
-
-
-
 
 public class ServerPong extends Activatable 
 							implements ClientRemoteInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
@@ -19,6 +13,7 @@ public class ServerPong extends Activatable
 	private ClientRemoteInterface opponent = null;
 	private ProxyToMainInterface mainRef = null;
 	private boolean myTurn = false;
+	private int id;
 
 	public ServerPong(ActivationID id, MarshalledObject data) throws IOException, ClassNotFoundException{
 		super(id,30002);
@@ -121,6 +116,20 @@ public class ServerPong extends Activatable
 	public void unreferenced() {
 		System.out.println("Hello i'm a player. Please kill me!");
 		
+	}
+
+	void closeGame() {
+		try {
+			mainRef.unregisterPlayer();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Successfully called unregister");
+		pong.deleteProxyRef();
+		pong.setEnabled(false);
+		pong = null;
+		//System.gc();
 	}
 
 }

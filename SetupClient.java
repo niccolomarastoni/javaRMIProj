@@ -18,10 +18,12 @@ public class SetupClient implements Serializable {
 		this.mainRef = mainRef;
 	}
 	public TetraPongProxy init(){
-		String codebase = "http://157.27.241.163:8000/common/";
+		String HOME_DIR = System.getProperty("user.home");
+		//System.out.println("Home: " + HOME_DIR);
+		String codebase = "http://157.27.241.159:8000/common/";
 		String ServerPongClass = "tetraPong.ServerPong";
-		String policyGroup = "/home/accounts/studenti/id270mam/javarmi/tetraPong/group.policy";//occhio ai Policy
-		System.setProperty("java.security.policy","/home/accounts/studenti/id270mam/javarmi/tetraPong/setup.policy");
+		String policyGroup =HOME_DIR + "/javarmi/tetraPong/group.policy";//occhio ai Policy
+		System.setProperty("java.security.policy",HOME_DIR + "/javarmi/tetraPong/setup.policy");
 		System.setProperty("java.rmi.server.codebase",codebase);
 		//System.setSecurityManager(new SecurityManager());
 		TetraPongProxy game = null;
@@ -31,7 +33,7 @@ public class SetupClient implements Serializable {
 			prop.put("java.security.policy", policyGroup);
 			prop.put("java.rmi.server.codebase",codebase);
 			prop.put("java.class.path","no_classpath");
-			prop.put("java.rmi.dgc.leaseValue","30000");
+			prop.put("java.rmi.dgc.leaseValue","3000");
 
 			MarshalledObject data = new MarshalledObject(mainRef);
 

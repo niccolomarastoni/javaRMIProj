@@ -16,12 +16,13 @@ import java.util.Properties;
 public class Setup{
 	//codebase su file e popup di configurazione
 	public static void main(String[] argv){
-		String codebase = "http://157.27.241.163:8000/common/";
+		String HOME_DIR = System.getProperty("user.home");
+		String codebase = "http://157.27.241.159:8000/common/";
 		String autenticationServerClass = "tetraPong.AutenticationServer";
 		String mainServerClass = "tetraPong.MainServer";
-		String policyGroup1 = "/home/accounts/studenti/id284txe/javarmi/tetraPong/group.policy";
-		String policyGroup2 = "/home/accounts/studenti/id284txe/javarmi/tetraPong/group.policy";
-		System.setProperty("java.security.policy","/home/accounts/studenti/id284txe/javarmi/tetraPong/setup.policy");
+		String policyGroup1 = HOME_DIR + "/javarmi/tetraPong/group.policy";
+		String policyGroup2 = HOME_DIR + "/javarmi/tetraPong/group.policy";
+		System.setProperty("java.security.policy",HOME_DIR + "/javarmi/tetraPong/setup.policy");
 		System.setProperty("java.rmi.server.codebase",codebase);
 		System.setSecurityManager(new SecurityManager());
 		try{
@@ -32,7 +33,10 @@ public class Setup{
 			prop1.put("java.rmi.server.codebase",codebase);
 			prop1.put("java.class.path","no_classpath");
 			prop1.put("java.rmi.dgc.leaseValue","30000");
-
+			prop1.put("javax.net.ssl.trustStore", HOME_DIR + "/javarmi/tetraPong/authServer.keystore");
+			prop1.put("javax.net.ssl.keyStore", HOME_DIR + "/javarmi/tetraPong/authServer.keystore");
+			prop1.put("javax.net.ssl.keyStorePassword", "authServer");
+			
 			prop2.put("java.security.policy", policyGroup2);
 			prop2.put("java.rmi.server.codebase",codebase);
 			prop2.put("java.class.path","no_classpath");

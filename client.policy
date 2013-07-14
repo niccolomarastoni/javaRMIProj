@@ -1,0 +1,39 @@
+/* AUTOMATICALLY GENERATED ON Fri Jul 12 15:04:13 CEST 2013*/
+/* DO NOT EDIT */
+
+grant codeBase "file:///home/accounts/studenti/id270mam/javarmi/" {
+  permission java.net.SocketPermission "157.27.241.248:1098-1099", "connect";
+  permission java.net.SocketPermission "157.27.241.248:8000", "connect";
+  permission java.net.SocketPermission "157.27.241.248:30000-30002", "connect";
+  permission java.net.SocketPermission "157.27.241.248:30003", "accept, listen, connect";
+  permission java.net.SocketPermission "157.27.241.249:1098-1100", "connect";
+  permission java.net.SocketPermission "157.27.241.249:30002", "connect";
+  permission java.net.SocketPermission "157.27.241.250:1098-1100", "connect";
+  permission java.net.SocketPermission "157.27.241.250:30002", "connect";
+  permission java.net.SocketPermission "127.0.0.1:1098", "connect,resolve";
+  permission java.awt.AWTPermission "showWindowWithoutWarningBanner";
+  permission java.awt.AWTPermission "listenToAllAWTEvents";
+  permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledCipherSuites", "read";
+  permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledProtocols", "read";
+  permission java.util.PropertyPermission "user.home", "read";
+  permission java.util.PropertyPermission "java.security.policy", "write";
+  permission java.lang.RuntimePermission "exitVM";
+};
+
+grant codeBase "http://157.27.241.248:8000/common/" {
+  permission java.net.SocketPermission "157.27.241.248:30002-30003", "accept, listen, connect";
+  permission java.net.SocketPermission "157.27.241.248:30000-30001", "connect";
+  permission java.net.SocketPermission "157.27.241.248:1098", "connect";
+  permission java.net.SocketPermission "157.27.241.249:1098-1100", "connect";
+  permission java.net.SocketPermission "157.27.241.249:30002", "connect";
+  permission java.net.SocketPermission "157.27.241.250:1098-1100", "connect";
+  permission java.net.SocketPermission "157.27.241.250:30002", "connect";
+  permission java.net.SocketPermission "127.0.0.1:1098", "connect";
+  permission java.awt.AWTPermission "showWindowWithoutWarningBanner";
+  permission java.awt.AWTPermission "listenToAllAWTEvents";
+  permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledCipherSuites", "read";
+  permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledProtocols", "read";
+  permission java.util.PropertyPermission "user.home", "read";
+  permission java.util.PropertyPermission "java.security.policy", "write";
+  permission java.lang.RuntimePermission "exitVM";
+};

@@ -7,20 +7,23 @@ import java.rmi.activation.Activatable;
 import java.rmi.activation.ActivationException;
 import java.rmi.activation.ActivationID;
 import java.rmi.activation.UnknownObjectException;
+import java.rmi.server.RemoteObject;
 import java.rmi.server.Unreferenced;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Vector;
 
 public class MainServer extends Activatable 
 implements Unreferenced, MainInterface, AdminServerInterface,ProxyToMainInterface{
 	private AdminUserInterface admin;
-	private ClientRemoteInterface player1 = null;
-	private ClientRemoteInterface player2 = null;
-	protected MainServer(ActivationID id, MarshalledObject data) throws RemoteException {
+	private int available = 5;
+	private PlayerInterface[][] games = new PlayerInterface[available][];
+	private int index = 0;
+	private Vector <PlayerInterface> waitingRoom = new Vector<PlayerInterface>();
+	protected MainServer(ActivationID id, MarshalledObject<?> data) throws RemoteException {
 		super(id, 30001);
 		System.out.println("Main su le mani!" + id);
 	}
 
-	// ciao grazie
 	@Override
 	public void unreferenced() {	
 		System.out.println("I'm trying to die!(Main)");
@@ -57,45 +60,41 @@ implements Unreferenced, MainInterface, AdminServerInterface,ProxyToMainInterfac
 	}
 
 	@Override
-	public String registerAdmin(AdminUserInterface admin) throws RemoteException {
-		this.admin = admin;
-		System.out.println("stub admin = " + admin);
-		return "YEAH";
+	public PlayerInterface getOpponent(int gameID,int id) throws RemoteException {
+		return games[gameID][id];
 	}
 
 	@Override
-	public ClientRemoteInterface getOpponent(int id) throws RemoteException {
-		if(id == 1)
-			return player1;
-		else
-			return player2;
-	}
-
-	@Override
-	public boolean registerPlayer(ClientRemoteInterface player)
-	throws RemoteException {
-		if(player1 == null && player2 == null){
-			player1 = player;
-			System.out.println("Registering p1 = "+player1);
+	public int getMatch(PlayerInterface player) throws RemoteException {
+		if(waitingRoom.isEmpty() || available == 0){
+			waitingRoom.add(player);
+			return -1;
 		}
-		else if(player2 == null && player1 != null){
-			player2 = player;
-			System.out.println("Registering p2 = "+player2);
-			player1.gameReady(2);
-			player2.gameReady(1);
+		else{
+			games[index] = new PlayerInterface[2];
+			games[index][0] = player;
+			games[index][1] = waitingRoom.firstElement();
+			waitingRoom.removeElementAt(0);
+			MainToPlayerInterface aux = (MainToPlayerInterface)games[index][1]; 
+			aux.gameReady(index);
+			int temp = index;
+			index = (index + 1)%available;
+			return temp;
 		}
-		else return false;
-		return true;
 	}
 
 	@Override
-	public void unregisterPlayer() throws RemoteException {
-		player1 = null;
-		player2 = null;
+	public void unregisterPlayer() throws RemoteException {//da implementare
 		System.out.println("Player Unregistered");
 
 		System.gc();
 		
+	}
+
+	@Override
+	public Object[][] getMatchData() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

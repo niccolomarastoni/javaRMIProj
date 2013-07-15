@@ -1,3 +1,10 @@
 grant{
-	permission java.security.AllPermission;
+		permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.security.policy=/home/accounts/studenti/id284txe/javarmi/tetraPong/rmid.policy";
+    permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.class.path=no_classpath";
+    permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.rmi.dgc.leaseValue=30000";
+    permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.security.policy=/home/accounts/studenti/id284txe/javarmi/tetraPong/group.policy";
+    permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.rmi.server.codebase=http://157.27.241.203:8000/common/";
+		permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.keyStorePassword=authServer";
+	  permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.keyStore=/home/accounts/studenti/id284txe/javarmi/tetraPong/authServer.keystore";
+		permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.trustStore=/home/accounts/studenti/id284txe/javarmi/tetraPong/authServer.keystore";
 };

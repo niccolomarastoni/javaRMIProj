@@ -17,7 +17,7 @@ public class Setup{
 	//codebase su file e popup di configurazione
 	public static void main(String[] argv){
 		String HOME_DIR = System.getProperty("user.home");
-		String codebase = "http://157.27.241.248:8000/common/";
+		String codebase = "http://157.27.241.203:8000/common/";
 		String autenticationServerClass = "tetraPong.AutenticationServer";
 		String mainServerClass = "tetraPong.MainServer";
 		String policyGroup1 = HOME_DIR + "/javarmi/tetraPong/group.policy";

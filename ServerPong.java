@@ -7,26 +7,32 @@ import java.rmi.activation.ActivationID;
 import java.rmi.server.Unreferenced;
 
 public class ServerPong extends Activatable 
-							implements ClientRemoteInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
+implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 	String ip = "//157.27.241.199";
 	private Pong pong;
-	private ClientRemoteInterface opponent = null;
+	private PlayerInterface opponent = null;
 	private ProxyToMainInterface mainRef = null;
 	private boolean myTurn = false;
+	private int gameID;
 	private int id;
 
 	public ServerPong(ActivationID id, MarshalledObject data) throws IOException, ClassNotFoundException{
 		super(id,30002);
 		pong = new Pong(this);
 		mainRef = (ProxyToMainInterface)data.get();
-		
+
 	}
-	
+
 	@Override
 	public void activate() throws RemoteException {
-		System.out.println("TetraPong Activated "+"Magneeeeee!");
-		mainRef.registerPlayer(this);
-		
+		System.out.println("TetraPong Activated ");
+		if((gameID = mainRef.getMatch(this)) == -1)
+			System.out.println("Waiting! :D");
+		else{
+			id = 0;
+			opponent = mainRef.getOpponent(gameID,1);
+		}
+			
 	}
 	@Override
 	public void setBall(double dx, double dy, double x, double y) throws RemoteException{
@@ -48,15 +54,13 @@ public class ServerPong extends Activatable
 	}
 
 	private void init() throws RemoteException{
-		new Thread(pong).start(); // facciamolo thread, che non muoia!!
-		//if(myTurn){
-			opponent.startGame();
-			System.out.println("Starting!:D");
-			pong.starting = true;
-			pong.running = true;
+		new Thread(pong).start();
+		opponent.startGame();
+		System.out.println("Starting!:D");
+		pong.starting = true;
+		pong.running = true;
 
-			opponent.setBall(-pong.dx,-pong.dy, 250, 250);
-		//}
+		opponent.setBall(-pong.dx,-pong.dy, 250, 250);
 	}
 
 	public void updateOppentScore() {
@@ -97,25 +101,20 @@ public class ServerPong extends Activatable
 		pong.highBase.x = baseX;
 	}
 
-	public static void main(String[] argv){
-		
-	}
-
 	@Override
-	public void gameReady(int id) throws RemoteException {
-		opponent = mainRef.getOpponent(id);	
-		System.out.println("Hello recieved player id = "+id+opponent);
-		if(id == 1){
-			myTurn = true;
-			init();
-		}
-			
+	public void gameReady(int gameID) throws RemoteException {
+		opponent = mainRef.getOpponent(gameID,0);	
+		this.gameID = gameID;
+		id =1;
+		System.out.println("Hello received player id = "+id+opponent);
+		init();
+
 	}
 
 	@Override
 	public void unreferenced() {
 		System.out.println("Hello i'm a player. Please kill me!");
-		
+
 	}
 
 	void closeGame() {

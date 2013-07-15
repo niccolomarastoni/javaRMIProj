@@ -1,0 +1,7 @@
+grant {
+    permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.security.policy=/home/accounts/studenti/id270mam/javarmi/tetraPong/rmid.policy";
+    permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.class.path=no_classpath";
+    permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.rmi.dgc.leaseValue=3000";
+    permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.security.policy=/home/accounts/studenti/id270mam/javarmi/tetraPong/group.policy";
+    permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.rmi.server.codebase=http://157.27.241.248:8000/common/";
+};

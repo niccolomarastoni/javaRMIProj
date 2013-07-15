@@ -13,8 +13,10 @@ import javax.swing.JTextField;
 
 
 public class Login extends JFrame implements Runnable{
-	private JTextField userField, passField;
-	String user, pass;
+	private JTextField userField;
+	private JPasswordField passField;
+	private String user;
+	private char[] pass;
 	private JTextArea userArea, passArea;
 	private loginButton login;
 	private cancelButton cancel;
@@ -49,13 +51,16 @@ public class Login extends JFrame implements Runnable{
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					user = userField.getText();
-					pass = passField.getText();
+					pass = passField.getPassword();
+					String passW = "";
+					for(char c:pass)
+						passW += c;
+					
 					int authenticationCode = 0; 		
 					AdminUserInterface rem = null;
-					System.out.println("user = " + user + " pass = " + pass);
+					System.out.println("user = " + user + " pass = " + passW);
 					try {
-						authenticationCode = auth.login(user, pass);
+						authenticationCode = auth.login(user, passW);
 						System.out.println("Auth. Code "+rem);
 						if(authenticationCode == -1){
 							System.out.println("Error code");
@@ -112,7 +117,8 @@ public class Login extends JFrame implements Runnable{
 		passArea.setEditable(false);
 		passArea.setBounds(10,44,50,30);
 		userField = new JTextField();
-		passField = new JTextField();
+		passField = new JPasswordField();
+		passField.setEchoChar('*');
 		userField.setBounds(80, 5, 200, 30);
 		getContentPane().add(login);
 		getContentPane().add(cancel);

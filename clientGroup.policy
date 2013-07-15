@@ -1,0 +1,5 @@
+grant{
+    permission java.awt.AWTPermission "showWindowWithoutWarningBanner";
+    permission java.net.SocketPermission "157.27.241.250:*", "accept";
+    permission java.net.SocketPermission "157.27.241.249:*", "accept";
+};

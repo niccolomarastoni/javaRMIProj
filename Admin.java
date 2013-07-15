@@ -11,7 +11,7 @@ public class Admin extends UnicastRemoteObject implements AdminUserInterface, Se
 	private AdminServerInterface mainRef;
 	private Remote adminRef;
 	public Admin(AdminServerInterface mainRef)throws RemoteException{
-		super(30001);
+		super(30003);
 		this.mainRef = mainRef;
 	}
 	@Override

@@ -16,7 +16,7 @@ implements Unreferenced, MainInterface, AdminServerInterface,ProxyToMainInterfac
 	private ClientRemoteInterface player1 = null;
 	private ClientRemoteInterface player2 = null;
 	protected MainServer(ActivationID id, MarshalledObject data) throws RemoteException {
-		super(id, 3001);
+		super(id, 30001);
 		System.out.println("Main su le mani!" + id);
 	}
 

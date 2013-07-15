@@ -22,7 +22,7 @@ public class AutenticationServer extends Activatable
 	MainInterface mainRef;
 	public AutenticationServer(ActivationID id,MarshalledObject obj) throws IOException, ClassNotFoundException{
 		//nel marshalledobject ci va il mainserver
-		super(id,3000, new SslRMIClientSocketFactory(), new SslRMIServerSocketFactory());
+		super(id,30000, new SslRMIClientSocketFactory(), new SslRMIServerSocketFactory());
 		mainRef = (MainInterface)obj.get();
 		System.out.println("Autentication su! " + id);
 		

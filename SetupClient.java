@@ -19,13 +19,9 @@ public class SetupClient implements Serializable {
 	}
 	public TetraPongProxy init(){
 		String HOME_DIR = System.getProperty("user.home");
-		//System.out.println("Home: " + HOME_DIR);
-		String codebase = "http://157.27.241.159:8000/common/";
+		String codebase = "http://157.27.241.248:8000/common/";
 		String ServerPongClass = "tetraPong.ServerPong";
 		String policyGroup =HOME_DIR + "/javarmi/tetraPong/group.policy";//occhio ai Policy
-		System.setProperty("java.security.policy",HOME_DIR + "/javarmi/tetraPong/setup.policy");
-		System.setProperty("java.rmi.server.codebase",codebase);
-		//System.setSecurityManager(new SecurityManager());
 		TetraPongProxy game = null;
 		try {
 			Properties prop = new Properties();

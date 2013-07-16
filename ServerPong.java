@@ -1,9 +1,12 @@
 package tetraPong;
 import java.io.IOException;
 import java.rmi.MarshalledObject;
+import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.activation.Activatable;
+import java.rmi.activation.ActivationException;
 import java.rmi.activation.ActivationID;
+import java.rmi.activation.UnknownObjectException;
 import java.rmi.server.Unreferenced;
 
 public class ServerPong extends Activatable 
@@ -11,27 +14,30 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 	String ip = "//157.27.241.199";
 	private Pong pong;
 	private PlayerInterface opponent = null;
-	private ProxyToMainInterface mainRef = null;
+	private PlayerToMainInterface mainRef = null;
 	private boolean myTurn = false;
 	private int gameID;
 	private int id;
+	private String user;
 
 	public ServerPong(ActivationID id, MarshalledObject data) throws IOException, ClassNotFoundException{
 		super(id,30002);
-		pong = new Pong(this);
-		mainRef = (ProxyToMainInterface)data.get();
+		mainRef = (PlayerToMainInterface)data.get();
 
 	}
 
 	@Override
-	public void activate() throws RemoteException {
-		System.out.println("TetraPong Activated ");
+	public void activate(String user) throws RemoteException {
+		this.user = user;
+		pong = new Pong(this);
 		if((gameID = mainRef.getMatch(this)) == -1)
 			System.out.println("Waiting! :D");
 		else{
 			id = 0;
 			opponent = mainRef.getOpponent(gameID,1);
 		}
+		
+		System.out.println(this +" Activated ");
 			
 	}
 	@Override
@@ -69,7 +75,11 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 			pong.starting = true;
 			opponent.setBall(-pong.dx,-pong.dy, 250, 250);
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			try {
+				mainRef.errorSignal(gameID,id);
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -77,14 +87,22 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		try {
 			opponent.Update(454 - pong.lowBase.x, 455 - pong.leftBase.y);
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			try {
+				mainRef.errorSignal(gameID,id);
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 	public void updateOpponentBallSpeed(){
 		try {
 			opponent.setBall(-pong.dx,-pong.dy, 480- pong.ball.x, 480 - pong.ball.y);
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			try {
+				mainRef.errorSignal(gameID,id);
+			} catch (RemoteException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -106,7 +124,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		opponent = mainRef.getOpponent(gameID,0);	
 		this.gameID = gameID;
 		id =1;
-		System.out.println("Hello received player id = "+id+opponent);
+		System.out.println("Hello received player id = "+id+opponent.getUser());
 		init();
 
 	}
@@ -114,12 +132,29 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 	@Override
 	public void unreferenced() {
 		System.out.println("Hello i'm a player. Please kill me!");
+		try {
+			if(Activatable.unexportObject(this, false))
+				Activatable.inactive(getID());
+		} catch (NoSuchObjectException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnknownObjectException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ActivationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.gc();
 
 	}
 
 	void closeGame() {
 		try {
-			mainRef.unregisterPlayer();
+			mainRef.unregisterPlayer(gameID,id,this);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -128,7 +163,33 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		pong.deleteProxyRef();
 		pong.setEnabled(false);
 		pong = null;
-		//System.gc();
+		System.gc();
 	}
+
+	@Override
+	public void opponentLeft() throws RemoteException {
+		//ferma il gioco
+		//apri finestra di dialogo
+		System.out.println("Vuoid giocare?");
+		
+	}
+	
+	@Override
+	public String getScore() throws RemoteException {
+		
+		return ""+pong.p1Score+" - " + pong.p2Score;
+	}
+	
+	@Override
+	public String toString(){
+		return user;
+	}
+
+	@Override
+	public String getUser() throws RemoteException {
+		return user;
+	}
+
+	
 
 }

@@ -73,13 +73,9 @@ public class Login extends JFrame implements Runnable{
 								AdminUserInterface admin = mainRef.getAdmin();
 								admin.startAdmin();
 							}else {
-								System.out.println("ciao");	
 								SetupClient setupClient = mainRef.getClient();
-								System.out.println("ciao passato");		
 								TetraPongProxy game = (TetraPongProxy)setupClient.init();
-								System.out.println("ciao passato di nuovo");		
-								game.activate();
-								System.out.println("Game is up! :|]");
+								game.activate(user);
 								System.exit(0);
 							}
 								

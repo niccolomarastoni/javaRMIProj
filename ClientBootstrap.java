@@ -29,7 +29,7 @@ public class ClientBootstrap {
 			else
 				ip = argv[0];
 
-			bs = (Bootstrap)Naming.lookup("//" + ip + "/AutenticationServer");
+			bs = (Bootstrap)Naming.lookup("//" + ip + "/AuthenticationServer");
 			bs.getClient().run();
 
 		} catch(RemoteException e){

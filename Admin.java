@@ -17,4 +17,7 @@ public class Admin extends UnicastRemoteObject implements AdminUserInterface, Se
 	public void startAdmin() throws RemoteException{
 		new AdminGUI(this);
 	}
+	public Object[][] getMatchData() throws RemoteException {
+		return mainRef.getMatchData();
+	}
 }

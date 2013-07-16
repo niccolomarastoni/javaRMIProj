@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.rmi.RemoteException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,20 +26,17 @@ public class AdminGUI extends JFrame {
 	Object[][] data;
 	public AdminGUI(Admin admin){
 		this.admin = admin;
-		data = getMatchData();
+		
 		init();
 	}
 
-	private Object[][] getMatchData() { // da fare remoto su mainserver, anche refresh punta qui
-		Object[][] temp = {{new Integer(1), "192.168.1.254", "178.23.212.23", "true", "2 - 3" },
-				{new Integer(3), "34.234.12.24", "128.23.21.123", "false", "10 - 3"},
-				{new Integer(22), "92.132.1.24", "78.123.12.123", "true", "4 - 3" },
-				{new Integer(1), "192.168.1.254", "178.23.212.23", "true", "2 - 3" },
-				{new Integer(3), "34.234.12.24", "128.23.21.123", "false", "10 - 3"}};
-		return temp;
-	}
 
 	private void init() {
+		try {
+			data = admin.getMatchData();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		this.setSize(700,250);
 		this.setTitle("Admin Panel");	
 		getContentPane().setLayout(null);
@@ -69,6 +67,7 @@ public class AdminGUI extends JFrame {
 	}
 
 	private void initMatches(){
+
 		matches = new JTable(data,columnNames);
 		matches.setFillsViewportHeight(true);
 		matches.setCellSelectionEnabled(false);
@@ -117,7 +116,11 @@ public class AdminGUI extends JFrame {
 	}
 
 	protected void refreshMatches() {
-		data = getMatchData();
+		try {
+			data = admin.getMatchData();
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		getContentPane().remove(matches);
 		initMatches();
 		getContentPane().repaint();

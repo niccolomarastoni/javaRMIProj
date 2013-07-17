@@ -206,14 +206,22 @@ public class AdminGUI extends JFrame {
 	}
 
 	protected void banUser() {
-		System.out.println("Banning user => " + matches.getValueAt(selection[0], selection[1]));
+		String user = (String) matches.getValueAt(selection[0], selection[1]);
+		System.out.println("Banning user => " + user);
+		admin.ban(user);
 	}
 
 	protected void stopMatch() {
-		System.out.println("Stoppin match => " + matches.getValueAt(selection[0], 0));
+		int gameID = (Integer)(matches.getValueAt(selection[0], 0));
+		System.out.println("Stoppin match => " + gameID);
+		admin.stopMatch(gameID-1);
 	}
 
 	protected void pingUser() {
-		System.out.println("Pinging user => " + matches.getValueAt(selection[0], selection[1]));		
+		String user = (String)matches.getValueAt(selection[0], selection[1]);
+		System.out.println("Pinging user => " + user);
+		long ping = admin.pingUser(user);
+		System.out.println("USER PINGGGGGG => " + ping);
+		//fai popup
 	}
 }

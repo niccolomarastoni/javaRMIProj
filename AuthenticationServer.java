@@ -9,15 +9,12 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.rmi.NoSuchObjectException;
 import java.rmi.MarshalledObject;
-import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.activation.Activatable;
 import java.rmi.activation.ActivationException;
 import java.rmi.activation.ActivationID;
 import java.rmi.activation.UnknownObjectException;
-import java.rmi.server.RemoteObject;
 import java.rmi.server.Unreferenced;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -107,22 +104,16 @@ implements Bootstrap, Authentication, Unreferenced{
 			ObjectOutputStream out = new ObjectOutputStream( new FileOutputStream(HOME_DIR+"/javarmi/tetraPong/.Clients"));
 			out.writeObject(new MarshalledObject(clients));
 		} catch (NoSuchObjectException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnknownObjectException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ActivationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Error database.");
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.gc();

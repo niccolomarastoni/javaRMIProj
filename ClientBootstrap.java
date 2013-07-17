@@ -12,27 +12,30 @@ import java.rmi.RemoteException;
 public class ClientBootstrap {
 
 	public static void main(String [] argv){
-		String ip = "157.27.241.151";
+		String ip;
 		Bootstrap bs;
-		Runnable client;
 		String HOME_DIR = System.getProperty("user.home");
-        System.setProperty("javax.net.ssl.trustStore", HOME_DIR + "/javarmi/tetraPong/loginClient.keystore");
-        System.setProperty("javax.net.ssl.trustStorePassword","loginClient");
-        System.setProperty("java.security.policy",HOME_DIR + "/javarmi/tetraPong/policy");
-        
+		System.setProperty("javax.net.ssl.trustStore", HOME_DIR + "/javarmi/tetraPong/loginClient.keystore");
+		System.setProperty("javax.net.ssl.trustStorePassword","loginClient");
 		System.setSecurityManager(new SecurityManager());
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-		
 
 		try {
+			if(argv.length == 0){
+				System.out.print("Autentication Server IP: ");
+				ip = in.readLine();
+			}
+			else
+				ip = argv[0];
+
 			bs = (Bootstrap)Naming.lookup("//" + ip + "/AuthenticationServer");
 			bs.getClient().run();
 
 		} catch(RemoteException e){
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (IOException e){
 			e.printStackTrace();
-		} catch (NotBoundException e) {
+		} catch (NotBoundException e){
 			e.printStackTrace();
 		}
 	}

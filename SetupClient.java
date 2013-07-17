@@ -2,7 +2,6 @@ package tetraPong;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -48,7 +47,7 @@ public class SetupClient implements Serializable {
 		} 
 		if(fileNotFound){
 			System.out.println("No savedRef. Creating a new one!");
-			String codebase = "http://157.27.241.138:8000/common/";
+			String codebase = "http://157.27.241.151:8000/common/";
 			String ServerPongClass = "tetraPong.ServerPong";
 			String policyGroup =HOME_DIR + "/javarmi/tetraPong/group.policy";
 			try {

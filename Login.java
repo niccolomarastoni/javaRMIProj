@@ -56,7 +56,7 @@ public class Login extends JFrame implements Runnable{
 					String passW = "";
 					for(char c:pass)
 						passW += c;
-					
+
 					int authenticationCode = 0; 		
 					System.out.println("user = " + user + " pass = " + passW);
 					try {
@@ -64,9 +64,7 @@ public class Login extends JFrame implements Runnable{
 						if(authenticationCode == -1){
 							System.out.println("Error code");
 							System.exit(0);
-						}
-
-						else {
+						}else {
 							MainInterface mainRef = auth.getMainServer();
 							if(authenticationCode == 1){
 								System.out.println("Sono istanza di AUI");								
@@ -78,7 +76,7 @@ public class Login extends JFrame implements Runnable{
 								game.activate(user);
 								System.exit(0);
 							}
-								
+
 						}
 					} catch (RemoteException e) {
 						// TODO Auto-generated catch block
@@ -89,7 +87,7 @@ public class Login extends JFrame implements Runnable{
 			});
 		}
 	}
-	
+
 	private class RegisterButton extends JButton{
 		public RegisterButton(){
 			super("Register");

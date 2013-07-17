@@ -2,7 +2,6 @@ package tetraPong;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.rmi.server.RemoteObject;
 
 
 public interface Authentication extends Remote{

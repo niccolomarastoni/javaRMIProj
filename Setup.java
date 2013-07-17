@@ -14,10 +14,9 @@ import java.rmi.activation.ActivationGroupID;
 import java.util.Properties;
 
 public class Setup{
-	//codebase su file e popup di configurazione
 	public static void main(String[] argv){
 		String HOME_DIR = System.getProperty("user.home");
-		String codebase = "http://157.27.241.138:8000/common/";
+		String codebase = "http://157.27.241.151:8000/common/";
 		String autenticationServerClass = "tetraPong.AuthenticationServer";
 		String mainServerClass = "tetraPong.MainServer";
 		String policyGroup1 = HOME_DIR + "/javarmi/tetraPong/group.policy";
@@ -54,7 +53,7 @@ public class Setup{
 			MarshalledObject data = new MarshalledObject(mainInt);
 			ActivationDesc autenticationServerDesc = new ActivationDesc(gID1, autenticationServerClass, codebase, data);
 			Bootstrap autenticationStub = (Bootstrap)Activatable.register(autenticationServerDesc);
-			System.out.println("Stubbe: " + autenticationStub);
+			System.out.println("Authentication stub: " + autenticationStub);
 
 			Naming.rebind("//:1099/AuthenticationServer", autenticationStub);
 			

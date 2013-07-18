@@ -22,7 +22,6 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 	public ServerPong(ActivationID id, MarshalledObject data) throws IOException, ClassNotFoundException{
 		super(id,30002);
 		mainRef = (PlayerToMainInterface)data.get();
-
 	}
 
 	@Override
@@ -33,24 +32,27 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		if((gameID = mainRef.getMatch(this)) == -1)
 			System.out.println("Waiting! :D");
 		else if(gameID == -2){
-			System.out.println("User "+user+ " banned popup");
+			pong.showVictory(" BANNED", true, " Banned from the game");
+			try {
+				Thread.sleep(4000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			pong.f.dispatchEvent(new WindowEvent(pong.f, WindowEvent.WINDOW_CLOSING));
 		}
+		
 		else{
 			id = 0;
 			opponent = mainRef.getOpponent(gameID,1);
 		}
-
-
 	}
+	
 	@Override
 	public void setBall(double dx, double dy, double x, double y) throws RemoteException{
-		//System.out.println("Setto dx = " + dx + " dy = " + dy);
 		pong.ball.x = x;
 		pong.ball.y = y;
 		pong.dx = dx;
 		pong.dy = dy;
-
 	}
 
 	@Override
@@ -59,7 +61,6 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		new Thread(pong).start();
 		pong.starting = true;
 		pong.running = true;
-
 	}
 
 	private void init() throws RemoteException{
@@ -68,7 +69,6 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		System.out.println("Starting!:D");
 		pong.starting = true;
 		pong.running = true;
-
 		opponent.setBall(-pong.dx,-pong.dy, 250, 250);
 	}
 
@@ -85,7 +85,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 			if(error)
 				mainRef.errorSignal(gameID,id);
 		} catch (RemoteException e1) {
-			e1.printStackTrace();
+			pong.showVictory("Connection Error", false, "Main Server Unreachable");
 		}
 	}
 
@@ -103,6 +103,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 			e1.printStackTrace();
 		}
 	}
+	
 	public void updateOpponentBallSpeed(){
 		boolean error = false;
 		try {
@@ -126,25 +127,24 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 			pong.starting = false;
 			pong.running = false;
 			pong.gameEnded = true;
-			pong.showVictory("YOU WON");
+			pong.showVictory("YOU WON", true);
 		}
 		else
 			pong.starting = true;
 	}
 
 	@Override
-	public void Update(double baseX, double baseY) throws RemoteException {// i due giocatori hanno lo dx e dy uguali e opposti(in teoria)
+	public void Update(double baseX, double baseY) throws RemoteException {
 		pong.rightBase.y = baseY;
 		pong.highBase.x = baseX;
 	}
-
 
 	@Override
 	public void stopGame() throws RemoteException {
 		pong.gameEnded = true;
 		pong.running = false;
 		pong.starting = false;
-		pong.showVictory("ADMIN STOP");
+		pong.showVictory("Connection Error", false, "Game stopped by admin");
 	}
 
 	@Override
@@ -154,7 +154,6 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		id =1;
 		System.out.println("Hello received player id = "+opponent.getUser());
 		init();
-
 	}
 
 	@Override
@@ -164,27 +163,21 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 			if(Activatable.unexportObject(this, false))
 				Activatable.inactive(getID());
 		} catch (NoSuchObjectException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (UnknownObjectException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ActivationException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.gc();
-
 	}
 
 	void closeGame() {
 		try {
 			mainRef.unregisterPlayer(gameID,id,this);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.println("Successfully called unregister");
@@ -200,8 +193,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		pong.starting = false;
 		pong.running = false;
 		if(!pong.gameEnded)
-			pong.showVictory("OPPONENT LEFT");
-
+			pong.showVictory("Connection Error", false, "Opponent left the game");
 	}
 
 	@Override

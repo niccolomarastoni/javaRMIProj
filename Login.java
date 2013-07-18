@@ -1,10 +1,10 @@
 package tetraPong;
 
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPasswordField;
@@ -23,8 +23,6 @@ public class Login extends JFrame implements Runnable{
 	private RegisterButton register;
 	Authentication auth;
 	public Login(Authentication auth){
-		//		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-		//	this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		this.auth = auth;
 		System.out.println("Stub auth = " + auth);
 	}
@@ -34,7 +32,6 @@ public class Login extends JFrame implements Runnable{
 			super("Cancel");
 			setBounds(180, 80, 100, 30);
 			this.addActionListener(new ActionListener(){
-
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					System.exit(0);
@@ -48,7 +45,6 @@ public class Login extends JFrame implements Runnable{
 			super("Login");
 			setBounds(80, 80, 80, 30);
 			this.addActionListener(new ActionListener(){
-
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
 					user = userField.getText();
@@ -76,13 +72,10 @@ public class Login extends JFrame implements Runnable{
 								game.activate(user);
 								System.exit(0);
 							}
-
 						}
 					} catch (RemoteException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-
 				}
 			});
 		}
@@ -137,11 +130,9 @@ public class Login extends JFrame implements Runnable{
 		getContentPane().add(userField);
 		getContentPane().add(userArea);
 		getContentPane().add(passArea);
+		getContentPane().setBackground(Color.white);
 		passField.setBounds(80,40,200,30);
-
-
 		getContentPane().add(passField);
-
 		setResizable(true);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -151,9 +142,6 @@ public class Login extends JFrame implements Runnable{
 
 	@Override
 	public void run() {
-		//System.setSecurityManager(new SecurityManager());
 		init();
-
 	}
-
 }

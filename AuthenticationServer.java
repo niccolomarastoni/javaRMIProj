@@ -32,7 +32,7 @@ implements Bootstrap, Authentication, Unreferenced{
 		
 		try {
 			mainRef = (MainInterface)obj.get();
-			System.out.println("Autentication su! " + id);
+			System.out.println(" [AUTH] Autentication Server exported " + id);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -48,15 +48,15 @@ implements Bootstrap, Authentication, Unreferenced{
 			Object  clientsData = ((MarshalledObject)in.readObject()).get();
 			clients = (Map<String,String>)clientsData;
 		}catch(FileNotFoundException e) {
-			System.out.println("Empty database.");
+			System.out.println(" [AUTH] Empty database.");
 		} catch (MalformedURLException e) {
-			System.out.println("Error database");
+			System.out.println(" [AUTH] Error database");
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("Error database");
+			System.out.println(" [AUTH] Error database");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			System.out.println("Error database");
+			System.out.println(" [AUTH] Error database");
 			e.printStackTrace();
 		}
 		
@@ -66,10 +66,10 @@ implements Bootstrap, Authentication, Unreferenced{
 	
 	@Override
 	public int login(String username, String password)throws RemoteException{
-		System.out.println("Number of clients registerd "+clients.size());
+		System.out.println(" [AUTH] Number of clients registerd "+clients.size());
 		
 		for (String client : clients.keySet())
-			System.out.println("Client = " + client + " pass = " + clients.get(client));
+			System.out.println(" [AUTH] client = " + client + " pass = " + clients.get(client));
 		
 		System.out.println("contains ? "+clients.containsKey(username));
 		
@@ -95,7 +95,7 @@ implements Bootstrap, Authentication, Unreferenced{
 	
 	@Override
 	public void unreferenced() {
-		System.out.println("I'm trying to die!(Autentication)");
+		System.out.println(" [AUTH] unreferenced() method called.");
 		try {
 			
 			if(Activatable.unexportObject(this, false))
@@ -103,6 +103,7 @@ implements Bootstrap, Authentication, Unreferenced{
 			String HOME_DIR = System.getProperty("user.home");
 			ObjectOutputStream out = new ObjectOutputStream( new FileOutputStream(HOME_DIR+"/javarmi/tetraPong/.Clients"));
 			out.writeObject(new MarshalledObject(clients));
+			System.out.println(" [AUTH] Database saved.");
 		} catch (NoSuchObjectException e) {
 			e.printStackTrace();
 		} catch (UnknownObjectException e) {
@@ -112,7 +113,7 @@ implements Bootstrap, Authentication, Unreferenced{
 		} catch (ActivationException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			System.out.println("Error database.");
+			System.out.println(" [AUTH] Error database.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

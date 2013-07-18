@@ -33,7 +33,7 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 	protected MainServer(ActivationID id, MarshalledObject<?> data) throws RemoteException {
 		super(id, 30001);
 		banList.add("paolo");
-		System.out.println("Main su le mani!" + id);
+		System.out.println(" [MAIN] Main Server exported." + id);
 		String HOME_DIR = System.getProperty("user.home");
 		String saveRef = HOME_DIR + "/javarmi/tetraPong/.banList";
 		ObjectInputStream in;
@@ -41,30 +41,31 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 			in = new ObjectInputStream(new URL("file://"+saveRef).openStream());
 			Object  banList = ((MarshalledObject)in.readObject()).get();
 			this.banList = (Set<String>)banList;
-			System.out.println("Banned users: ");
+			System.out.println(" [MAIN] Banned users: ");
 			
 			for(String user:this.banList)
-				System.out.println("\t"+user);
+				System.out.println(" [MAIN] "+user);
 		}catch(FileNotFoundException e) {
-			System.out.println("Empty database.");
+			System.out.println(" [MAIN] Empty database.");
 		} catch (MalformedURLException e) {
-			System.out.println("Error database");
+			System.out.println(" [MAIN] Error database");
 		} catch (IOException e) {
-			System.out.println("Error database");
+			System.out.println(" [MAIN] Error database");
 		} catch (ClassNotFoundException e) {
-			System.out.println("Error database");
+			System.out.println(" [MAIN] Error database");
 		}
 	}
 
 	@Override
 	public void unreferenced() {	
-		System.out.println("I'm trying to die!(Main)");
+		System.out.println(" [MAIN] unreferenced method called.");
 		try {
 			if(Activatable.unexportObject(this, false))
 				Activatable.inactive(getID());
 			String HOME_DIR = System.getProperty("user.home");
 			ObjectOutputStream out = new ObjectOutputStream( new FileOutputStream(HOME_DIR+"/javarmi/tetraPong/.banList"));
 			out.writeObject(new MarshalledObject(banList));
+			System.out.println(" [MAIN] Database saved.");
 		} catch (NoSuchObjectException e) {
 			e.printStackTrace();
 		} catch (UnknownObjectException e) {
@@ -74,7 +75,7 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 		} catch (ActivationException e) {
 			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			System.out.println("Error database.");
+			System.out.println(" [MAIN] Error database.");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -84,8 +85,8 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 	@Override
 	public Admin getAdmin() throws RemoteException {
 		Admin admin = new Admin((AdminServerInterface)this);
-		if(UnicastRemoteObject.unexportObject(admin,true))
-			System.out.println("Admin server unexported!");
+		UnicastRemoteObject.unexportObject(admin,true);
+
 		return admin;
 	}
 
@@ -101,12 +102,12 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 
 	@Override
 	public int getMatch(PlayerInterface player) throws RemoteException {
-		System.out.println(player.getUser()+" wants a match!");
+		System.out.println(" [MAIN]  "+player.getUser()+" wants a match.");
 		if(banList.contains(player.getUser()))
 			return -2;
 		if(waitingRoom.isEmpty() || available == 0){
 			waitingRoom.add(player);
-			System.out.println("In waitingroom");
+			System.out.println(" [MAIN]  "+player.getUser()+" in waiting room.");
 			return -1;
 		}
 		else{
@@ -114,7 +115,7 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 			games[index][0] = player;
 			games[index][1] = waitingRoom.firstElement();
 			waitingRoom.removeElementAt(0);
-			System.out.println("Game created");
+			System.out.println(" [MAIN] Game created. GameID = " + index);
 			MainToPlayerInterface aux = (MainToPlayerInterface)games[index][1];
 			try{
 				aux.gameReady(index);
@@ -135,7 +136,7 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 	public void unregisterPlayer(int gameID,int id, PlayerInterface player) throws RemoteException {//da implementare
 		if(gameID < 0){
 			waitingRoom.remove(player);
-			System.out.println("Removing from waiting room. Is empty "+ waitingRoom.isEmpty());
+			System.out.println(" [MAIN] Removing "+player.getUser() + " from waiting room.");
 		}
 		else{
 
@@ -150,12 +151,12 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 				try{
 					((MainToPlayerInterface)(games[gameID][id])).opponentLeft();
 				}catch(RemoteException e){
-					System.out.println("Unable to reach" + games[gameID][id]+". Closing game.");
+					System.out.println(" [MAIN] Unable to reach" + games[gameID][id]+". Closing game.");
 					games[gameID] = null;
 				}
 			}
 		}
-		System.out.println("Player " +player.getUser()+ " unregistered");
+		System.out.println(" [MAIN] Player " +player.getUser()+ " unregistered");
 		System.gc();
 
 	}
@@ -163,9 +164,9 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 	@Override
 	public void errorSignal(int gameID, int id) throws RemoteException {
 		if(games[gameID][(id+1)%2] != null){
-			System.out.print("Error signal received: ");
+			System.out.print(" [MAIN] Error signal received: ");
 			System.out.println(games[gameID][id].getUser() + "Couldn't reach" + games[gameID][(id+1)%2]);
-			System.out.println("Closing game: " +gameID);
+			System.out.println(" [MAIN] Closing game: " +gameID);
 			games[gameID] = null;
 			try{
 				((MainToPlayerInterface)(games[gameID][id])).opponentLeft();
@@ -196,15 +197,15 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 	@Override
 	public void banUser(String user) throws RemoteException {
 		banList.add(user);
-		System.out.println("Banned users: ");
+		System.out.println(" [MAIN] Banned users: ");
 		
 		for(String u:this.banList)
-			System.out.println("\t\t\t"+u);
+			System.out.println(" [MAIN] \t\t\t"+u);
 	}
 
 	@Override
 	public long pingUser(String user) throws RemoteException {
-		System.out.println("Ping " + user);
+		System.out.println(" [MAIN] Ping " + user);
 		MainToPlayerInterface player = null;
 		for(PlayerInterface[] game: games)
 			if(game[0].getUser().equals(user)){
@@ -229,7 +230,7 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 	public void stopMatch(int gameID) throws RemoteException {
 		((MainToPlayerInterface)games[gameID][0]).stopGame();
 		((MainToPlayerInterface)games[gameID][1]).stopGame();
-		System.out.println("Stopped game: "+gameID);
+		System.out.println(" [MAIN] Stopped game: "+gameID);
 	}
 
 

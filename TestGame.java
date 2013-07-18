@@ -1,8 +1,11 @@
+package tetraPong;
 
-public class TestGame { // per testare il gioco in locale
+import java.awt.event.WindowEvent;
+
+public class TestGame { 
   private Pong game;
 	public TestGame(){
-		game = new Pong(250,265);
+		game = new Pong();
 		game.startGame();
 	}
 	

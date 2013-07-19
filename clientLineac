@@ -1,0 +1,2 @@
+java -Djava.security.policy=tetraPong/policy tetraPong.ClientBootstrap
+rmid -log /home/accounts/studenti/id270mam/javarmi/tetraPong/log-rmid/ -J-Djava.rmi.server.codebase=http://157.27.241.192:8000/common/ -J-Djava.security.policy=/home/accounts/studenti/id270mam/javarmi/tetraPong/rmid.policy &

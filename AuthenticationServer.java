@@ -66,17 +66,13 @@ implements Bootstrap, Authentication, Unreferenced{
 	
 	@Override
 	public int login(String username, String password)throws RemoteException{
-		System.out.println(" [AUTH] Number of clients registerd "+clients.size());
-		
-		for (String client : clients.keySet())
-			System.out.println(" [AUTH] client = " + client + " pass = " + clients.get(client));
-		
-		System.out.println("contains ? "+clients.containsKey(username));
-		
+				
 		if(username.equals(admin[0]) && password.equals(admin[1]))
 			return 1;
-		else if(clients.containsKey(username) && clients.get(username).equals(password))
+		else if(clients.containsKey(username) && clients.get(username).equals(password)){
+			System.out.println(" [AUTH] "+username+" logged.");
 			return 0;
+		}
 		return -1; 
 	}
 	
@@ -85,6 +81,9 @@ implements Bootstrap, Authentication, Unreferenced{
 		if(clients.containsKey(username))
 			return false;
 		clients.put(username, password);
+		System.out.println(" [AUTH] Number of clients registered "+clients.size());
+		for (String client : clients.keySet())
+			System.out.println(" [AUTH] client = " + client + " pass = " + clients.get(client));
 		return true;
 	}
 	

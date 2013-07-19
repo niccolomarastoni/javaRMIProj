@@ -5,10 +5,10 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.io.Serializable;
 
-public class Admin extends UnicastRemoteObject implements AdminUserInterface, Serializable{
-	private AdminServerInterface mainRef;
+public class Admin extends UnicastRemoteObject implements UserToAdminInterface, Serializable{
+	private AdminToServerInterface mainRef;
 	private Remote adminRef;
-	public Admin(AdminServerInterface mainRef)throws RemoteException{
+	public Admin(AdminToServerInterface mainRef)throws RemoteException{
 		super(30003);
 		this.mainRef = mainRef;
 	}

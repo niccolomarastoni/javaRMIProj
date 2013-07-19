@@ -64,7 +64,7 @@ public class Login extends JFrame implements Runnable{
 							MainInterface mainRef = auth.getMainServer();
 							if(authenticationCode == 1){
 								System.out.println("Sono istanza di AUI");								
-								AdminUserInterface admin = mainRef.getAdmin();
+								UserToAdminInterface admin = mainRef.getAdmin();
 								admin.startAdmin();
 							}else {
 								SetupClient setupClient = mainRef.getClient();

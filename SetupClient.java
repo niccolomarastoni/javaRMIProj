@@ -47,7 +47,7 @@ public class SetupClient implements Serializable {
 		} 
 		if(fileNotFound){
 			System.out.println("No savedRef. Creating a new one!");
-			String codebase = "http://157.27.241.151:8000/common/";
+			String codebase = "http://157.27.241.192:8000/common/";
 			String ServerPongClass = "tetraPong.ServerPong";
 			String policyGroup =HOME_DIR + "/javarmi/tetraPong/group.policy";
 			try {
@@ -56,7 +56,7 @@ public class SetupClient implements Serializable {
 				prop.put("java.security.policy", policyGroup);
 				prop.put("java.rmi.server.codebase",codebase);
 				prop.put("java.class.path","no_classpath");
-				prop.put("java.rmi.dgc.leaseValue","3000");
+				prop.put("java.rmi.dgc.leaseValue","30000");
 
 				MarshalledObject data = new MarshalledObject(mainRef);
 

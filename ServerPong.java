@@ -30,7 +30,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		pong = new Pong(this);
 		System.out.println(this +" Activated ");
 		if((gameID = mainRef.getMatch(this)) == -1)
-			System.out.println("Waiting! :D");
+			System.out.println("In Waiting Room");
 		else if(gameID == -2){
 			pong.showVictory(" BANNED", true, " Banned from the game");
 			try {
@@ -40,13 +40,13 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 			}
 			pong.f.dispatchEvent(new WindowEvent(pong.f, WindowEvent.WINDOW_CLOSING));
 		}
-		
+
 		else{
 			id = 0;
 			opponent = mainRef.getOpponent(gameID,1);
 		}
 	}
-	
+
 	@Override
 	public void setBall(double dx, double dy, double x, double y) throws RemoteException{
 		pong.ball.x = x;
@@ -103,7 +103,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 			e1.printStackTrace();
 		}
 	}
-	
+
 	public void updateOpponentBallSpeed(){
 		boolean error = false;
 		try {
@@ -135,8 +135,10 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 
 	@Override
 	public void Update(double baseX, double baseY) throws RemoteException {
-		pong.rightBase.y = baseY;
-		pong.highBase.x = baseX;
+		if(pong != null){
+			pong.rightBase.y = baseY;
+			pong.highBase.x = baseX;
+		}
 	}
 
 	@Override

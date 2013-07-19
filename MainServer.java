@@ -21,8 +21,8 @@ import java.util.Set;
 import java.util.Vector;
 
 public class MainServer extends Activatable 
-implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterface{
-	private AdminUserInterface admin;
+implements Unreferenced, MainInterface, AdminToServerInterface,PlayerToMainInterface{
+	private UserToAdminInterface admin;
 	private int nSlots = 5;
 	private int available = nSlots;
 	private PlayerInterface[][] games = new PlayerInterface[nSlots][];
@@ -84,7 +84,7 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 
 	@Override
 	public Admin getAdmin() throws RemoteException {
-		Admin admin = new Admin((AdminServerInterface)this);
+		Admin admin = new Admin((AdminToServerInterface)this);
 		UnicastRemoteObject.unexportObject(admin,true);
 
 		return admin;
@@ -102,12 +102,12 @@ implements Unreferenced, MainInterface, AdminServerInterface,PlayerToMainInterfa
 
 	@Override
 	public int getMatch(PlayerInterface player) throws RemoteException {
-		System.out.println(" [MAIN]  "+player.getUser()+" wants a match.");
+		System.out.println(" [MAIN] "+player.getUser()+" wants a match.");
 		if(banList.contains(player.getUser()))
 			return -2;
 		if(waitingRoom.isEmpty() || available == 0){
 			waitingRoom.add(player);
-			System.out.println(" [MAIN]  "+player.getUser()+" in waiting room.");
+			System.out.println(" [MAIN] "+player.getUser()+" in waiting room.");
 			return -1;
 		}
 		else{

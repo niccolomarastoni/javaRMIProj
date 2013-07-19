@@ -2,15 +2,16 @@
 /* DO NOT EDIT */
 
 grant codeBase "file:///home/accounts/studenti/id270mam/javarmi/" {
-  permission java.net.SocketPermission "157.27.241.248:1098-1099", "connect";
-  permission java.net.SocketPermission "157.27.241.248:8000", "connect";
-  permission java.net.SocketPermission "157.27.241.248:30000-30002", "connect";
-  permission java.net.SocketPermission "157.27.241.248:30003", "accept, listen, connect";
-  permission java.net.SocketPermission "157.27.241.249:1098-1100", "connect";
-  permission java.net.SocketPermission "157.27.241.249:30002", "connect";
-  permission java.net.SocketPermission "157.27.241.250:1098-1100", "connect";
-  permission java.net.SocketPermission "157.27.241.250:30002", "connect";
-  permission java.net.SocketPermission "127.0.0.1:1098", "connect,resolve";
+  permission java.awt.AWTPermission "accessClipboard";
+  permission java.net.SocketPermission "157.27.241.192:1098-1099", "connect";
+  permission java.net.SocketPermission "157.27.241.192:8000", "connect";
+  permission java.net.SocketPermission "157.27.241.192:30000-30001", "connect";
+  permission java.net.SocketPermission "localhost:30003", "accept, listen, connect";
+  permission java.net.SocketPermission "localhost:1098", "connect";
+  permission java.net.SocketPermission "*:30002", "connect";
+  permission java.net.SocketPermission "*:1098", "connect";
+  permission java.net.SocketPermission "localhost:30002", "connect, listen, accept";
+  permission java.io.FilePermission "/home/accounts/studenti/id270mam/javarmi/tetraPong/.RemoteRef", "write, read"; 
   permission java.awt.AWTPermission "showWindowWithoutWarningBanner";
   permission java.awt.AWTPermission "listenToAllAWTEvents";
   permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledCipherSuites", "read";
@@ -20,15 +21,14 @@ grant codeBase "file:///home/accounts/studenti/id270mam/javarmi/" {
   permission java.lang.RuntimePermission "exitVM";
 };
 
-grant codeBase "http://157.27.241.248:8000/common/" {
-  permission java.net.SocketPermission "157.27.241.248:30002-30003", "accept, listen, connect";
-  permission java.net.SocketPermission "157.27.241.248:30000-30001", "connect";
-  permission java.net.SocketPermission "157.27.241.248:1098", "connect";
-  permission java.net.SocketPermission "157.27.241.249:1098-1100", "connect";
-  permission java.net.SocketPermission "157.27.241.249:30002", "connect";
-  permission java.net.SocketPermission "157.27.241.250:1098-1100", "connect";
-  permission java.net.SocketPermission "157.27.241.250:30002", "connect";
-  permission java.net.SocketPermission "127.0.0.1:1098", "connect";
+grant codeBase "http://157.27.241.192:8000/common/" {
+  permission java.awt.AWTPermission "accessClipboard";
+  permission java.net.SocketPermission "localhost:30002-30003", "accept, listen, connect";
+  permission java.net.SocketPermission "157.27.241.192:30000-30001", "connect";
+  permission java.net.SocketPermission "157.27.241.192:1098-1099", "connect";
+  permission java.net.SocketPermission "*:1098", "connect";
+  permission java.net.SocketPermission "*:30002", "connect";
+  permission java.io.FilePermission "/home/accounts/studenti/id270mam/javarmi/tetraPong/.RemoteRef", "write, read"; 
   permission java.awt.AWTPermission "showWindowWithoutWarningBanner";
   permission java.awt.AWTPermission "listenToAllAWTEvents";
   permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledCipherSuites", "read";

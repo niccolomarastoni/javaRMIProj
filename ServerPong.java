@@ -1,4 +1,5 @@
 package tetraPong;
+import java.awt.Frame;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.rmi.MarshalledObject;
@@ -9,6 +10,8 @@ import java.rmi.activation.ActivationException;
 import java.rmi.activation.ActivationID;
 import java.rmi.activation.UnknownObjectException;
 import java.rmi.server.Unreferenced;
+
+import javax.swing.JFrame;
 
 public class ServerPong extends Activatable 
 implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
@@ -33,12 +36,6 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 			System.out.println("In Waiting Room");
 		else if(gameID == -2){
 			pong.showVictory(" BANNED", true, " Banned from the game");
-			try {
-				Thread.sleep(4000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			pong.f.dispatchEvent(new WindowEvent(pong.f, WindowEvent.WINDOW_CLOSING));
 		}
 
 		else{
@@ -72,7 +69,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		opponent.setBall(-pong.dx,-pong.dy, 250, 250);
 	}
 
-	public void updateOppentScore() {
+	protected void updateOppentScore() {
 		boolean error = false;
 		try {
 			opponent.updateScore(pong.p2Score, pong.p1Score);
@@ -89,7 +86,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		}
 	}
 
-	public void updateOpponentBase(){
+	protected void updateOpponentBase(){
 		boolean error = false;
 		try {
 			opponent.Update(454 - pong.lowBase.x, 455 - pong.leftBase.y);
@@ -104,7 +101,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		}
 	}
 
-	public void updateOpponentBallSpeed(){
+	protected void updateOpponentBallSpeed(){
 		boolean error = false;
 		try {
 			opponent.setBall(-pong.dx,-pong.dy, 480- pong.ball.x, 480 - pong.ball.y);

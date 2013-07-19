@@ -103,8 +103,10 @@ implements Unreferenced, MainInterface, AdminToServerInterface,PlayerToMainInter
 	@Override
 	public int getMatch(PlayerInterface player) throws RemoteException {
 		System.out.println(" [MAIN] "+player.getUser()+" wants a match.");
-		if(banList.contains(player.getUser()))
+		if(banList.contains(player.getUser())){
+			System.out.println(" [MAIN] "+player.getUser()+" is banned.");
 			return -2;
+		}
 		if(waitingRoom.isEmpty() || available == 0){
 			waitingRoom.add(player);
 			System.out.println(" [MAIN] "+player.getUser()+" in waiting room.");

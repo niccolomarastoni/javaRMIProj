@@ -18,11 +18,11 @@ public class Admin extends UnicastRemoteObject implements UserToAdminInterface, 
 		new AdminGUI(this);
 	}
 	
-	public Object[][] getMatchData() throws RemoteException {
+	protected Object[][] getMatchData() throws RemoteException {
 		return mainRef.getMatchData();
 	}
 	
-	public void ban(String user){
+	protected void ban(String user){
 		try {
 			mainRef.banUser(user);
 		} catch (RemoteException e) {
@@ -30,7 +30,7 @@ public class Admin extends UnicastRemoteObject implements UserToAdminInterface, 
 		}
 	}
 	
-	public void stopMatch(int gameID){
+	protected void stopMatch(int gameID){
 		try {
 			mainRef.stopMatch(gameID);
 		} catch (RemoteException e) {
@@ -38,7 +38,7 @@ public class Admin extends UnicastRemoteObject implements UserToAdminInterface, 
 		}
 	}
 	
-	public long pingUser(String user){
+	protected long pingUser(String user){
 		try {
 			return mainRef.pingUser(user);
 		} catch (RemoteException e) {

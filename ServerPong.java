@@ -157,7 +157,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 
 	@Override
 	public void unreferenced() {
-		System.out.println("Hello i'm a player. Please kill me!");
+		System.out.println( this + " called unreferenced() method.");
 		try {
 			if(Activatable.unexportObject(this, false))
 				Activatable.inactive(getID());

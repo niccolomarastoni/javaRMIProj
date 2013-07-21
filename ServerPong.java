@@ -177,7 +177,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		try {
 			mainRef.unregisterPlayer(gameID,id,this);
 		} catch (RemoteException e) {
-			System.out.println("Unable to reache the Main Server.");
+			System.out.println("Unable to reach the Main Server.");
 		}
 		System.out.println("Successfully called unregister");
 		pong.setVisible(false);

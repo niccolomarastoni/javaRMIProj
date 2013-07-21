@@ -11,7 +11,7 @@ import java.rmi.RemoteException;
  */
 public interface UserToAdminInterface extends Remote {
 	/**
-	 * Lunches the Admin GUI.
+	 * Launches the Admin GUI.
 	 * @throws RemoteException
 	 */
 	public void startAdmin() throws RemoteException;

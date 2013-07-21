@@ -18,7 +18,7 @@ public interface AdminToServerInterface extends Remote{
 	 */
 	public Object[][] getMatchData() throws RemoteException;
 	/**
-	 * Puts in the ban list the user.
+	 * Puts the user in the ban list.
 	 * @param user to ban.
 	 * @throws RemoteException
 	 */

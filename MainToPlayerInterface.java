@@ -13,7 +13,7 @@ import java.rmi.RemoteException;
 public interface MainToPlayerInterface extends Remote{
 	/**
 	 * Informs the player that a game is ready. And provides a gameID.
-	 * gameID is unique identifier for the game in the Main Server.
+	 * gameID is a unique identifier for the game in the Main Server.
 	 * @param gameID
 	 * @throws RemoteException
 	 */

@@ -73,7 +73,7 @@ public class Login extends JFrame implements Runnable{
 							}
 						}
 					} catch (RemoteException e) {
-						System.out.println("Unable to reache the server.");
+						System.out.println("Unable to reach the server.");
 					}
 				}
 			});
@@ -96,7 +96,7 @@ public class Login extends JFrame implements Runnable{
 						if(!auth.register(user, passW))
 							System.out.println("Already registered!");
 					} catch (RemoteException e1) {
-						System.out.println("Unable to reache the server.");
+						System.out.println("Unable to reach the server.");
 					}
 				}});
 		}

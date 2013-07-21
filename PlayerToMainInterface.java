@@ -32,12 +32,12 @@ public interface PlayerToMainInterface  extends Remote{
 	 * 
 	 * @param gameID identifier of the match. 
 	 * @param id player's identifier.
-	 * @param palyer palyer's stub.
+	 * @param player player's stub.
 	 * @throws RemoteException
 	 */
-	public void unregisterPlayer(int gameID,int id,PlayerInterface palyer) throws RemoteException;
+	public void unregisterPlayer(int gameID,int id,PlayerInterface player) throws RemoteException;
 	/**
-	 * Informs the Main Server the opponent is unreachable. The Main Server will end the mathc.
+	 * Informs the Main Server the opponent is unreachable. The Main Server will end the match.
 	 * 
 	 * @param gameID identifier of the match.
 	 * @param id player's identifier.

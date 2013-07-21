@@ -221,7 +221,6 @@ public class AdminGUI extends JFrame {
 		String user = (String)matches.getValueAt(selection[0], selection[1]);
 		System.out.println("Pinging user => " + user);
 		long ping = admin.pingUser(user);
-		System.out.println("USER PINGGGGGG => " + ping);
-		//fai popup
+		System.out.println("USER PING => " + ping);
 	}
 }

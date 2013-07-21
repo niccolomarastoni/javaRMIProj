@@ -97,7 +97,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 			if(error)
 				mainRef.errorSignal(gameID,id);
 		} catch (RemoteException e1) {
-			e1.printStackTrace();
+			pong.showVictory("Connection Error", false, "Main Server Unreachable");
 		}
 	}
 
@@ -112,7 +112,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 			if(error)
 				mainRef.errorSignal(gameID,id);
 		} catch (RemoteException e1) {
-			e1.printStackTrace();
+			pong.showVictory("Connection Error", false, "Main Server Unreachable");
 		}
 	}
 
@@ -177,7 +177,7 @@ implements PlayerInterface ,TetraPongProxy,MainToPlayerInterface,Unreferenced{
 		try {
 			mainRef.unregisterPlayer(gameID,id,this);
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			System.out.println("Unable to reache the Main Server.");
 		}
 		System.out.println("Successfully called unregister");
 		pong.setVisible(false);

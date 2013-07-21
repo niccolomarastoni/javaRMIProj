@@ -12,7 +12,7 @@ import java.rmi.RemoteException;
  */
 public interface PlayerInterface extends Remote {
 	/**
-	 * Sets ball's position a velocity.
+	 * Sets ball's position and velocity.
 	 * @param dx = horizontal speed.
 	 * @param dy = vertical speed.
 	 * @param x = horizontal position.
@@ -21,7 +21,7 @@ public interface PlayerInterface extends Remote {
 	 */
 	public void setBall(double dx, double dy, double x, double y) throws RemoteException;
 	/**
-	 * Sends the bases position to the opponent.
+	 * Sends the position of the bases to the opponent.
 	 * @param baseX = the position of the horizontal base.
 	 * @param baseY = the position of the vertical base
 	 * @throws RemoteException
@@ -40,7 +40,7 @@ public interface PlayerInterface extends Remote {
 	 */
 	public void startGame() throws RemoteException;
 	/**
-	 * Retrieves player's username.
+	 * Retrieves the player's username.
 	 * @return username.
 	 * @throws RemoteException
 	 */
